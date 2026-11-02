@@ -6,12 +6,12 @@
   "zip": "22399",
   "city": "Hamburg",
   "hours": "Mo–Fr [7–17 Uhr]",
-  "response": "[24 Stunden]",
+  "response": "[48 Stunden]",
   "responseShort": "[24 h]",
   "rating": "[4,9]",
   "reviews": "[XX]",
   "contactName": "[Name]",
-  "managers": "Danilo Del Favero, Tomasz Gajda",
+  "managers": "Danilo Del Favero",
   "instagram": "https://www.instagram.com/dmcimmobilien",
   "formEndpoint": "#"
 }

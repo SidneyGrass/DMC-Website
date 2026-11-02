@@ -1,0 +1,12 @@
+{
+  "name": "dmc-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Website DMC Immobilien – auf Basis des Wireframes „Bauwerk HH“",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs && npx --yes serve dist -l 3000"
+  },
+  "engines": { "node": "22.x" }
+}

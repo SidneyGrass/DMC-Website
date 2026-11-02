@@ -13,9 +13,11 @@ Website nach dem Wireframe „Bauwerk HH Wireframe“ (Stand 02.11.2026) – mit
 - `build.mjs` – erzeugt alle Seiten nach `dist/`.
 - `public/` – CSS, JavaScript, Schriften, Favicon.
 
-## Seiten (37)
+## Seiten (43)
 
-Startseite · Leistungen (Übersicht + 10 Leistungsseiten) · Referenzen (+ 9 Projektseiten) · Ablauf · Über uns · Einsatzgebiet · Ratgeber (+ 6 Artikel) · Karriere · Kontakt (mehrstufiges Formular) · Impressum · Datenschutz · 404 · Cookie-Banner
+Startseite · Bauen & Sanieren: Leistungen (Übersicht + 10 Leistungsseiten), Neubau, Ablauf · Immobilien: Angebote (Filter Kaufen/Mieten), Exposé (Beispiel Sasel), Verkaufen/Bewerten (3-stufiges Formular), Hausverwaltung · Referenzen (+ 10 Projektseiten) · Über uns · Einsatzgebiet · Ratgeber (+ 6 Artikel) · Karriere · Kontakt (mehrstufiges Formular mit Verzweigung nach Anliegen) · Impressum · Datenschutz · 404 · Cookie-Banner
+
+Navigation: Mega-Menü „Bauen & Sanieren“ / „Immobilien“ (Linklisten in `src/content.mjs` → `menu`, Footer → `footerLinks`).
 
 ## Lokal starten
 

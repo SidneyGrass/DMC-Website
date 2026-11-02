@@ -36,7 +36,11 @@ export const icons = {
   layers: "M12 3l9 5-9 5-9-5 9-5z M3 13l9 5 9-5 M3 17.5l9 5 9-5",
   plus: "M12 5v14 M5 12h14",
   mail: "M3 6h18v12H3z M3 7l9 7 9-7",
-  pin: "M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+  pin: "M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
+  chevronDown: "M6 9l6 6 6-6",
+  close: "M6 6l12 12 M18 6L6 18",
+  menu: "M4 7h16M4 12h16M4 17h16",
+  instagram: "M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4z M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M17.5 6.5h.01"
 };
 
 // ---------------------------------------------------------------------------
@@ -49,7 +53,7 @@ export const services = [
     d: icons.layers,
     h1: "Komplettsanierung in Hamburg – alle Gewerke aus einer Hand.",
     intro: "Von der Elektrik bis zum letzten Anstrich: Wir sanieren Ihre Wohnung oder Ihr Haus komplett. Sie haben einen festen Ansprechpartner, einen verbindlichen Zeitplan und am Ende ein fertiges Zuhause.",
-    bullets: ["Ein Ansprechpartner für alle Gewerke", "Schriftliches Angebot nach Besichtigung", "Typische Dauer: ca. [X–X] Wochen"],
+    bullets: ["Ein Ansprechpartner für alle Gewerke", "Schriftliches Angebot nach Besichtigung", "Verbindlicher Zeitplan vor Baubeginn"],
     photo: "Projektfoto: komplett sanierte Altbauwohnung in Hamburg",
     scope: [
       ["Bestandsaufnahme & Planung", "Aufmaß, Zustand, Wünsche – daraus entsteht ein Gesamtplan mit Zeitachse."],
@@ -89,7 +93,7 @@ export const services = [
     d: "M4 21V10l8-6 8 6v11 M3 21h18 M10 21v-5h4v5 M15 6.5V4h2v4",
     h1: "Altbausanierung in Hamburg – Charme erhalten, Technik erneuern.",
     intro: "Stuck, Dielen, hohe Decken: Wir erhalten, was den Altbau ausmacht, und bringen Elektrik, Leitungen und Bäder auf den heutigen Stand. Mit Erfahrung in Hamburger Gründerzeit- und Nachkriegsbauten.",
-    bullets: ["Erfahrung mit Hamburger Altbauten", "Schriftliches Angebot nach Besichtigung", "Typische Dauer: ca. [X–X] Wochen"],
+    bullets: ["Erfahrung mit Hamburger Altbauten", "Schriftliches Angebot nach Besichtigung", "Verbindlicher Zeitplan vor Baubeginn"],
     photo: "Projektfoto: Altbauwohnung mit Stuck und Dielen",
     scope: [
       ["Substanzprüfung", "Leitungen, Balkenlage, Feuchtigkeit und Putz – bevor geplant wird."],
@@ -129,7 +133,7 @@ export const services = [
     d: "M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5z M6 12V6a2 2 0 0 1 4 0 M7 19l-1 2 M17 19l1 2",
     h1: "Badsanierung in Hamburg – komplett aus einer Hand.",
     intro: "Wir erneuern Ihr Bad vom ersten Entwurf bis zur letzten Fuge. Sanitär, Elektro, Fliesen und Trockenbau koordinieren wir – Sie haben einen Ansprechpartner und einen festen Zeitplan.",
-    bullets: ["Alle Gewerke koordiniert – ein Ansprechpartner", "Schriftliches Angebot nach Besichtigung", "Typische Dauer: ca. [X] Wochen"],
+    bullets: ["Alle Gewerke koordiniert – ein Ansprechpartner", "Schriftliches Angebot nach Besichtigung", "Verbindlicher Zeitplan vor Baubeginn"],
     photo: "Projektfoto: fertiges Bad aus Hamburg",
     scope: [
       ["Beratung & Planung", "Wünsche, Maße, Ausstattung – auf Wunsch mit 3D-Skizze [prüfen]."],
@@ -170,7 +174,7 @@ export const services = [
     d: "M3 3h14v6H3z M17 6h3v5h-8v3 M10.5 14h3v7h-3z",
     h1: "Malerarbeiten in Hamburg – sauber gestrichen, ordentlich hinterlassen.",
     intro: "Wände und Decken, Treppenhäuser, Fassaden und Holzfenster: Wir spachteln, streichen und lackieren – mit abgeklebten Kanten, geschützten Böden und einer Baustelle, die jeden Abend aufgeräumt ist.",
-    bullets: ["Böden und Möbel geschützt", "Schriftliches Angebot nach Besichtigung", "Typische Dauer: ca. [X] Tage pro Wohnung"],
+    bullets: ["Böden und Möbel geschützt", "Schriftliches Angebot nach Besichtigung", "Verbindlicher Zeitplan vor Baubeginn"],
     photo: "Projektfoto: frisch gestrichenes Treppenhaus",
     scope: [
       ["Beratung & Farbwahl", "Farbtöne, Glanzgrad und geeignete Farben für jeden Raum."],
@@ -370,7 +374,7 @@ export const services = [
     d: "M4 4h16v16H4z M4 12h8V4 M12 20v-8h8",
     h1: "Bodenarbeiten in Hamburg – verlegt, geschliffen, versiegelt.",
     intro: "Ob neues Parkett, robuster Vinylboden oder alte Dielen, die wieder glänzen sollen: Wir bereiten den Untergrund vor, verlegen und versiegeln – sauber und termintreu.",
-    bullets: ["Untergrund geprüft und vorbereitet", "Schriftliches Angebot nach Aufmaß", "Typische Dauer: ca. [X] Tage pro Wohnung"],
+    bullets: ["Untergrund geprüft und vorbereitet", "Schriftliches Angebot nach Aufmaß", "Verbindlicher Zeitplan vor Baubeginn"],
     photo: "Projektfoto: geschliffener Dielenboden",
     scope: [
       ["Beratung & Aufmaß", "Material, Optik und Nutzung – passend zum Raum."],
@@ -452,12 +456,13 @@ export const serviceBySlug = Object.fromEntries(services.map((s) => [s.slug, s])
 // Referenzen / Projekte
 // ---------------------------------------------------------------------------
 export const projects = [
+  { slug: "doppelhaus-stadtteil", cat: "Neubau", area: "als", img: "neubau-luft", title: "Doppelhaus [Stadtteil]", meta: "[Wohnfläche] · Massivbau · [Bauzeit]", h1: "Doppelhaus in [Stadtteil]: massiv gebaut, pünktlich übergeben.", objekt: "Doppelhaus, Neubau in Massivbauweise", flaeche: "[Wohnfläche] m²", dauer: "[Bauzeit]", gewerke: "Rohbau, Haustechnik, Innenausbau mit eigenen Handwerkern", service: null },
   { slug: "altbauwohnung-stadtteil", cat: "Komplettsanierung", area: "a", title: "Altbauwohnung [Stadtteil]", meta: "[m²] · [Dauer] · alle Gewerke", h1: "Altbauwohnung in [Stadtteil]: aus 1920 wird heute.", objekt: "Altbauwohnung, Bj. [1920]", flaeche: "[85] m²", dauer: "[7] Wochen", gewerke: "Elektro, Sanitär, Trockenbau, Boden, Maler", service: "komplettsanierung" },
   { slug: "familienbad-stadtteil", cat: "Bad", area: "e", title: "Familienbad [Stadtteil]", meta: "[m²] · [Dauer] · Sanitär, Fliesen", h1: "Familienbad in [Stadtteil]: Platz für alle.", objekt: "Wohnung, Bj. [1965]", flaeche: "[9] m²", dauer: "[3] Wochen", gewerke: "Sanitär, Elektro, Fliesen, Trockenbau", service: "badsanierung" },
   { slug: "reihenhaus-stadtteil", cat: "Energetisch", area: "w", title: "Reihenhaus [Stadtteil]", meta: "[Baujahr] · [Dauer] · Dämmung, Fenster", h1: "Reihenhaus in [Stadtteil]: warm durch den Winter.", objekt: "Reihenhaus, Bj. [1972]", flaeche: "[120] m²", dauer: "[6] Wochen", gewerke: "Dämmung, Fenster, Heizung", service: "energetische-sanierung" },
   { slug: "jugendstilwohnung-stadtteil", cat: "Altbau", area: "e", title: "Jugendstilwohnung [Stadtteil]", meta: "[m²] · [Dauer] · Boden, Maler, Elektro", h1: "Jugendstilwohnung in [Stadtteil]: Stuck bleibt, Technik neu.", objekt: "Altbauwohnung, Bj. [1908]", flaeche: "[110] m²", dauer: "[8] Wochen", gewerke: "Elektro, Boden, Maler", service: "altbausanierung" },
   { slug: "treppenhaus-stadtteil", cat: "Maler", area: "a", title: "Treppenhaus [Stadtteil]", meta: "[Etagen] · [Dauer] · Malerarbeiten", h1: "Treppenhaus in [Stadtteil]: frisch für alle Parteien.", objekt: "Mehrfamilienhaus, [5] Etagen", flaeche: "[400] m² Wandfläche", dauer: "[2] Wochen", gewerke: "Malerarbeiten, Lackierarbeiten", service: "malerarbeiten" },
-  { slug: "holzfenster-stadtteil", cat: "Fenster", area: "w", title: "Holzfenster [Stadtteil]", meta: "[Anzahl] Fenster · aufgearbeitet", h1: "Holzfenster in [Stadtteil]: aufgearbeitet statt ersetzt.", objekt: "Altbau, Bj. [1912]", flaeche: "[14] Fenster", dauer: "[2] Wochen", gewerke: "Schleifen, Kitt, Lack, Dichtungen", service: "fenster-tueren" },
+  { slug: "holzfenster-stadtteil", cat: "Fenster", area: "elb", title: "Holzfenster [Stadtteil]", meta: "[Anzahl] Fenster · aufgearbeitet", h1: "Holzfenster in [Stadtteil]: aufgearbeitet statt ersetzt.", objekt: "Altbau, Bj. [1912]", flaeche: "[14] Fenster", dauer: "[2] Wochen", gewerke: "Schleifen, Kitt, Lack, Dichtungen", service: "fenster-tueren" },
   { slug: "duschbad-stadtteil", cat: "Bad", area: "a", title: "Duschbad [Stadtteil]", meta: "[m²] · [Dauer] · barrierefrei", h1: "Duschbad in [Stadtteil]: bodengleich und barrierefrei.", objekt: "Wohnung, Bj. [1958]", flaeche: "[6] m²", dauer: "[3] Wochen", gewerke: "Sanitär, Fliesen, Elektro", service: "badsanierung" },
   { slug: "einfamilienhaus-stadtteil", cat: "Komplettsanierung", area: "w", title: "Einfamilienhaus [Stadtteil]", meta: "[m²] · [Dauer] · alle Gewerke", h1: "Einfamilienhaus in [Stadtteil]: einmal alles neu.", objekt: "Einfamilienhaus, Bj. [1964]", flaeche: "[150] m²", dauer: "[12] Wochen", gewerke: "Alle Gewerke", service: "komplettsanierung" },
   { slug: "dielenboden-stadtteil", cat: "Boden", area: "e", title: "Dielenboden [Stadtteil]", meta: "[m²] · geschliffen & geölt", h1: "Dielenboden in [Stadtteil]: 100 Jahre alt, wie neu.", objekt: "Altbauwohnung, Bj. [1925]", flaeche: "[70] m²", dauer: "[5] Tage", gewerke: "Schleifen, Ölen", service: "boden" }
@@ -481,21 +486,24 @@ export const homeFaq = [
   ["Was kostet eine Sanierung?", "Das hängt von Fläche, Zustand und Ausstattung ab. Nach der Besichtigung erhalten Sie ein schriftliches Angebot mit allen Positionen."],
   ["Wie schnell können Sie anfangen?", "[Aktuelle Vorlaufzeit einsetzen]. Beim Vor-Ort-Termin nennen wir Ihnen einen verbindlichen Starttermin."],
   ["Kann ich während der Sanierung in der Wohnung bleiben?", "Bei einzelnen Gewerken meist ja. Bei Komplettsanierungen planen wir mit Ihnen, welche Räume nutzbar bleiben."],
-  ["Koordinieren Sie alle Handwerker?", "Ja. Ihr fester Ansprechpartner stimmt alle Gewerke und Termine ab – Sie müssen sich um nichts kümmern."],
+  ["Arbeiten bei mir eigene Handwerker?", "Ja. Unsere Handwerker sind fest bei DMC angestellt – keine wechselnden Subunternehmer. Ihr fester Ansprechpartner stimmt alle Gewerke und Termine ab."],
+  ["Was kostet die Bewertung meiner Immobilie?", "Die Ersteinschätzung ist kostenlos und unverbindlich. Auf Wunsch besichtigen wir die Immobilie und erstellen eine ausführliche Marktanalyse."],
   ["Helfen Sie bei Fördermitteln?", "Wir zeigen Ihnen, welche Maßnahmen förderfähig sein können, und arbeiten dafür mit Energieberatern zusammen [prüfen]."]
 ];
 
-export const districts = ["Altona", "Bergedorf", "Eimsbüttel", "Hamburg-Mitte", "Hamburg-Nord", "Alstertal", "Wandsbek", "Umland"];
+export const districts = ["Ottensen bis Blankenese", "Altona", "Bergedorf", "Eimsbüttel", "Hamburg-Mitte", "Hamburg-Nord", "Alstertal (Firmensitz)", "Wandsbek", "Umland"];
 
+// [Gebiet, Stadtteile, Kerngebiet?, Linktext „Sanierung …“]
 export const areas = [
-  ["Altona", "Altona-Altstadt, Ottensen, Bahrenfeld, Othmarschen, Blankenese, Lurup …", false],
-  ["Bergedorf", "Bergedorf, Lohbrügge, Curslack, Neuallermöhe …", false],
-  ["Eimsbüttel", "Eimsbüttel, Lokstedt, Niendorf, Stellingen, Eidelstedt, Schnelsen …", true],
-  ["Hamburg-Mitte", "St. Georg, St. Pauli, Hamm, Horn, Billstedt, Wilhelmsburg …", false],
-  ["Hamburg-Nord", "Winterhude, Eppendorf, Barmbek, Uhlenhorst, Fuhlsbüttel, Langenhorn …", true],
-  ["Alstertal", "Poppenbüttel, Sasel, Wellingsbüttel, Hummelsbüttel, Bergstedt, Duvenstedt …", false],
-  ["Wandsbek", "Wandsbek, Bramfeld, Volksdorf, Rahlstedt, Farmsen-Berne, Marienthal …", true],
-  ["Umland", "[z. B. Norderstedt, Ahrensburg, Pinneberg – nur wo Sie wirklich arbeiten]", false]
+  ["Elbvororte", "Ottensen, Othmarschen, Groß Flottbek, Nienstedten, Blankenese", true, "in den Elbvororten"],
+  ["Altona", "Altona-Altstadt, Altona-Nord, Bahrenfeld, Lurup, Osdorf …", false, "in Altona"],
+  ["Bergedorf", "Bergedorf, Lohbrügge, Curslack, Neuallermöhe …", false, "in Bergedorf"],
+  ["Eimsbüttel", "Eimsbüttel, Lokstedt, Niendorf, Stellingen, Eidelstedt, Schnelsen …", false, "in Eimsbüttel"],
+  ["Hamburg-Mitte", "St. Georg, St. Pauli, Hamm, Horn, Billstedt, Wilhelmsburg …", false, "in Hamburg-Mitte"],
+  ["Hamburg-Nord", "Winterhude, Eppendorf, Barmbek, Uhlenhorst, Fuhlsbüttel, Langenhorn …", false, "in Hamburg-Nord"],
+  ["Alstertal", "Firmensitz · Poppenbüttel, Sasel, Wellingsbüttel, Hummelsbüttel, Bergstedt, Duvenstedt …", true, "im Alstertal"],
+  ["Wandsbek", "Wandsbek, Bramfeld, Volksdorf, Rahlstedt, Farmsen-Berne, Marienthal …", false, "in Wandsbek"],
+  ["Umland", "[z. B. Norderstedt, Ahrensburg, Pinneberg – nur wo Sie wirklich arbeiten]", false, "im Umland"]
 ];
 
 // ---------------------------------------------------------------------------
@@ -521,7 +529,7 @@ export const processFaq = [
 // ---------------------------------------------------------------------------
 // Über uns
 // ---------------------------------------------------------------------------
-export const team = ["Geschäftsführung", "Projektleitung", "[Meister] Sanitär", "Elektro", "Malerei", "Bodenleger", "Trockenbau", "Büro & Termine"];
+export const team = ["Geschäftsführung", "Bauleitung", "Immobilienberatung", "Sanitär & Heizung", "Elektro", "Malerei", "Boden & Trockenbau", "Büro & Termine"];
 export const values = [
   ["Ehrlich", "Wir sagen, was geht – und was nicht. Auch beim Preis.", "M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z M9 12l2 2 4-4"],
   ["Ordentlich", "Saubere Baustelle, geschützte Räume, jeden Abend aufgeräumt.", "M4 20h16 M6 20V9l6-5 6 5v11 M10 20v-5h4v5"],
@@ -544,6 +552,7 @@ export const jobs = [
   { title: "Maler und Lackierer (m/w/d)", type: "Vollzeit", tasks: ["Spachtel-, Streich- und Lackierarbeiten in Wohnungen und Treppenhäusern", "Tapezieren und Aufarbeiten von Holzfenstern", "Sorgfältiger Umgang mit Kundeneigentum"], profile: ["Abgeschlossene Ausbildung als Maler/-in und Lackierer/-in", "Erfahrung im Innenausbau [prüfen]", "Führerschein Klasse B"] },
   { title: "Anlagenmechaniker SHK (m/w/d)", type: "Vollzeit", tasks: ["Installation von Sanitär- und Heizungsanlagen", "Badsanierungen im Team", "Wartung und Austausch von Heizkörpern"], profile: ["Abgeschlossene Ausbildung als Anlagenmechaniker/-in SHK", "Selbstständige, saubere Arbeitsweise", "Führerschein Klasse B"] },
   { title: "Elektroniker (m/w/d)", type: "Vollzeit", tasks: ["Elektroinstallationen in Sanierungsprojekten", "Aufbau von Unterverteilungen", "Prüfung und Dokumentation"], profile: ["Abgeschlossene Ausbildung als Elektroniker/-in für Energie- und Gebäudetechnik", "Erfahrung im Altbau von Vorteil", "Führerschein Klasse B"] },
+  { title: "Immobilienkaufmann/-frau (m/w/d)", type: "Vollzeit", tasks: ["Vermarktung und Vermietung von Wohn- und Gewerbeimmobilien", "Exposés, Besichtigungen und Interessentenbetreuung", "Bewertungen und Eigentümerberatung [Aufgaben prüfen]"], profile: ["Abgeschlossene Ausbildung als Immobilienkaufmann/-frau oder vergleichbar", "Erfahrung in Vermarktung oder Verwaltung [prüfen]", "Führerschein Klasse B"] },
   { title: "Ausbildung 2027 (m/w/d)", type: "Ausbildung", tasks: ["Mitarbeit auf echten Baustellen von Anfang an", "Feste Ansprechperson während der gesamten Ausbildung", "Berufsschule in Hamburg"], profile: ["Schulabschluss [prüfen]", "Freude am Handwerk", "Zuverlässigkeit und Teamgeist"] }
 ];
 
@@ -625,4 +634,171 @@ export const articles = [
     ],
     faq: [["Wie lange hält eine Aufarbeitung?", "Bei guter Pflege viele Jahre. [Erfahrungswert einsetzen]"], ["Kann man alte Fenster besser dämmen?", "Mit neuen Dichtungen und ggf. neuer Verglasung lässt sich einiges verbessern. [prüfen]"]]
   }
+];
+
+// ---------------------------------------------------------------------------
+// Navigation – Mega-Menü (Header), Footer-Spalten und Startseiten-Einstiege
+// nutzen dieselben Linkziele.
+// ---------------------------------------------------------------------------
+export const menu = {
+  bauen: {
+    label: "Bauen & Sanieren",
+    col1Title: "Neubau & Sanierung",
+    col1: [["Neubau & Projektierung", "/neubau"], ["Komplettsanierung", "/leistungen/komplettsanierung"], ["Altbausanierung", "/leistungen/altbausanierung"], ["Badsanierung", "/leistungen/badsanierung"], ["Energetische Sanierung", "/leistungen/energetische-sanierung"]],
+    col2Title: "Einzelgewerke",
+    col2: [["Maler", "/leistungen/malerarbeiten"], ["Elektro", "/leistungen/elektroarbeiten"], ["Sanitär & Heizung", "/leistungen/sanitaer-heizung"], ["Boden", "/leistungen/boden"], ["Trockenbau", "/leistungen/trockenbau"], ["Fenster & Türen", "/leistungen/fenster-tueren"]],
+    extra: ["So läuft es ab", "/ablauf"],
+    cta: ["Projekt anfragen", "/kontakt"],
+    teaserImg: "wohnen",
+    teaserAlt: "Fertig sanierter Wohnraum",
+    teaserTitle: "Alle Gewerke mit eigenen Handwerkern.",
+    teaserText: "Fest angestellte Fachleute statt Subunternehmer – ein Ansprechpartner von der Besichtigung bis zur Abnahme."
+  },
+  immobilien: {
+    label: "Immobilien",
+    col1Title: "Aktuelle Angebote",
+    col1: [["Kaufen", "/immobilien?art=kaufen"], ["Mieten", "/immobilien?art=mieten"], ["Suchauftrag", "/kontakt?anliegen=suchen"]],
+    col2Title: "Für Eigentümer",
+    col2: [["Immobilie verkaufen", "/immobilie-verkaufen"], ["Immobilie vermieten", "/immobilie-verkaufen?ziel=vermieten"], ["Kostenlose Bewertung", "/immobilie-verkaufen#bewertung"], ["Hausverwaltung", "/hausverwaltung"]],
+    extra: ["Alle Angebote ansehen", "/immobilien"],
+    cta: ["Immobilie bewerten", "/immobilie-verkaufen"],
+    teaserImg: "villa",
+    teaserAlt: "Villa in Hamburg",
+    teaserTitle: "Was ist Ihre Immobilie wert?",
+    teaserText: "Kostenlose Ersteinschätzung von unseren Immobilienexperten – Makler mit Erlaubnis nach § 34c GewO."
+  }
+};
+
+export const footerLinks = {
+  bauen: [["Neubau & Projektierung", "/neubau"], ["Komplettsanierung", "/leistungen/komplettsanierung"], ["Altbausanierung", "/leistungen/altbausanierung"], ["Badsanierung", "/leistungen/badsanierung"], ["Energetische Sanierung", "/leistungen/energetische-sanierung"], ["Einzelgewerke (Maler, Elektro, Sanitär …)", "/leistungen"], ["So läuft es ab", "/ablauf"]],
+  immobilien: [["Kaufen & Mieten", "/immobilien"], ["Immobilie verkaufen", "/immobilie-verkaufen"], ["Immobilie vermieten", "/immobilie-verkaufen?ziel=vermieten"], ["Kostenlose Bewertung", "/immobilie-verkaufen#bewertung"], ["Hausverwaltung", "/hausverwaltung"], ["Suchauftrag", "/kontakt?anliegen=suchen"]],
+  unternehmen: [["Über uns", "/ueber-uns"], ["Referenzen", "/referenzen"], ["Ratgeber", "/ratgeber"], ["Karriere", "/karriere"], ["Einsatzgebiet", "/einsatzgebiet"], ["Kontakt", "/kontakt"]]
+};
+
+// Startseite S3 – Unterthemen der beiden Geschäftsbereiche
+export const homeTopics = {
+  bauen: [["Neubau & Projektierung", "/neubau"], ["Komplettsanierung", "/leistungen/komplettsanierung"], ["Badsanierung", "/leistungen/badsanierung"], ["Energetische Sanierung", "/leistungen/energetische-sanierung"], ["Einzelgewerke", "/#gewerke"], ["So läuft es ab", "/ablauf"]],
+  immobilien: footerLinks.immobilien
+};
+
+// ---------------------------------------------------------------------------
+// Neubau & Projektierung
+// ---------------------------------------------------------------------------
+export const neubau = {
+  scope: [
+    ["Grundstück & Machbarkeit", "Wir prüfen Ihr Grundstück oder helfen bei der Suche – inklusive Bebaubarkeit und erster Kostenschätzung.", "M3 20h18 M5 20V10l7-5 7 5v10 M3 10h18"],
+    ["Planung & Genehmigung", "Entwurf, Bauantrag und Abstimmung mit Behörden – mit erfahrenen Architekten und Statikern [prüfen].", "M4 4h12l4 4v12H4z M8 12h8 M8 16h5"],
+    ["Massivbau", "Traditionelle Massivbauweise für Werterhalt, gutes Raumklima und Schallschutz.", "M3 21h18 M4 21V8h16v13 M4 12h16 M4 16h16 M9 8v4 M15 12v4 M9 16v5"],
+    ["Ausbau mit eigenen Handwerkern", "Sanitär, Elektro, Maler, Boden und Trockenbau aus dem eigenen Team.", "M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"],
+    ["Kosten- & Terminsicherheit", "Fester Zeitplan und transparente Kosten – mit regelmäßigen Updates von der Baustelle.", "M4 5h16v15H4z M4 9h16 M8 3v4 M16 3v4 M8 14l2 2 4-4"],
+    ["Vermarktung auf Wunsch", "Sie bauen als Kapitalanlage? Wir vermieten oder verkaufen die fertigen Einheiten für Sie.", "M4 7h16v13H4z M8 7V4h8v3 M9 13h6"]
+  ],
+  steps: [
+    ["Erstgespräch", "Ihre Wünsche, Budget und Grundstück – persönlich besprochen."],
+    ["Planung", "Entwurf, Kostenrahmen und Bauantrag."],
+    ["Rohbau", "Massiv gemauert, mit festem Zeitplan."],
+    ["Ausbau", "Haustechnik und Innenausbau durch eigene Handwerker."],
+    ["Übergabe", "Gemeinsame Abnahme und Schlüsselübergabe."]
+  ],
+  // [Titel, Ort, Meta, Bild, Link]
+  refs: [
+    ["Doppelhäuser [Stadtteil]", "[Stadtteil]", "[Anzahl] Einheiten · Massivbau · [Jahr]", "neubau-luft", "/referenzen/doppelhaus-stadtteil"],
+    ["Stadtvillen [Stadtteil]", "[Stadtteil]", "[Wohnfläche] · Massivbau · [Jahr]", "neubau", "/referenzen"],
+    ["Einfamilienhaus [Stadtteil]", "[Stadtteil]", "[Wohnfläche] · in Planung", "neubau-modell", "/referenzen"]
+  ],
+  faq: [
+    ["Brauche ich schon ein Grundstück?", "Nein. Wir beraten Sie auch, wenn Sie noch suchen, und prüfen Grundstücke auf Bebaubarkeit."],
+    ["Wie lange dauert ein Neubau?", "[Typische Bauzeit einsetzen, z. B. 9–12 Monate ab Baugenehmigung]."],
+    ["Was kostet ein Neubau?", "Das hängt von Größe, Ausstattung und Grundstück ab. Nach dem Erstgespräch erhalten Sie einen transparenten Kostenrahmen."],
+    ["Bauen Sie auch Mehrfamilienhäuser?", "[prüfen] Ja – auch als Kapitalanlage, auf Wunsch inklusive Vermietung oder Verkauf der Einheiten."]
+  ]
+};
+
+// ---------------------------------------------------------------------------
+// Immobilien – Angebote (später automatisch aus onOffice)
+// kind: Kauf/Miete · region: Filterwert „Ort / Region“ · type: Objektart · price: Zahl für „Preis bis“
+// ---------------------------------------------------------------------------
+export const listings = [
+  { kind: "Kauf", img: "objekt-cas-catala", place: "Cas Catala (Mallorca)", title: "Exklusives Penthouse mit Meerblick", facts: "[Zimmer] Zi. · [Fläche] m² · Wohnung", price: "1.650.000 €", priceNum: 1650000, region: "Ausland", type: "Wohnung" },
+  { kind: "Miete", img: "objekt-sasel", place: "Hamburg-Sasel", title: "Exklusiv wohnen im schönen Sasel", facts: "[Zimmer] Zi. · [Fläche] m² · Haus", price: "3.650 € / Monat", priceNum: 3650, region: "Alstertal", type: "Haus", slug: "exklusiv-wohnen-sasel" },
+  { kind: "Miete", img: "objekt-hoisdorf", place: "Hoisdorf", title: "Exklusiv wohnen im schönen Hoisdorf", facts: "[Zimmer] Zi. · [Fläche] m² · Haus", price: "2.650 € / Monat", priceNum: 2650, region: "Umland", type: "Haus" },
+  { kind: "Miete", img: "objekt-bargteheide", place: "Bargteheide", title: "[Objekttitel ergänzen]", facts: "[Zimmer] Zi. · [Fläche] m² · [Objektart]", price: "5.990 € / Monat", priceNum: 5990, region: "Umland", type: "" },
+  { kind: "Miete", img: "objekt-altona", place: "Hamburg-Altona", title: "Handwerker-Boxen und Lagerflächen", facts: "[Fläche] m² · Gewerbe", price: "900 € / Monat", priceNum: 900, region: "Hamburg (weitere)", type: "Gewerbe" }
+];
+
+export const expose = {
+  slug: "exklusiv-wohnen-sasel",
+  facts: [["Kaltmiete", "3.650 €"], ["Wohnfläche", "[ ] m²"], ["Zimmer", "[ ]"], ["Verfügbar ab", "[Datum]"]],
+  description: "[Beschreibungstext aus dem Exposé: Lage im Haus, Raumaufteilung, Besonderheiten.]",
+  features: ["[Merkmal, z. B. Einbauküche]", "[Merkmal, z. B. Terrasse / Garten]", "[Merkmal, z. B. Fußbodenheizung]", "[Merkmal, z. B. Stellplatz]"],
+  location: "[Lagebeschreibung: Nahversorgung, Schulen, Anbindung – ohne genaue Adresse.]",
+  energy: [["Ausweistyp", "[Bedarf / Verbrauch]"], ["Energiekennwert", "[ ] kWh/(m²·a)"], ["Energieträger", "[ ]"], ["Baujahr", "[ ]"], ["Effizienzklasse", "[ ]"]],
+  thumbs: [["Wohnen", "wohnen"], ["Küche", "kueche"], ["Bad", "bad-dusche"], ["Schlafen", "schlafen"]]
+};
+
+// ---------------------------------------------------------------------------
+// Immobilie verkaufen / vermieten / bewerten
+// ---------------------------------------------------------------------------
+export const valuation = {
+  usps: ["Kostenlos und unverbindlich", "Persönlicher Ansprechpartner", "Marktkenntnis in Hamburg und Umgebung"],
+  steps: [
+    ["Bewertung", "Marktgerechter Preis auf Basis von Lage, Zustand und aktuellen Vergleichswerten."],
+    ["Vermarktung", "Professionelle Fotos, Exposé und gezielte Ansprache über unser Netzwerk und Portale."],
+    ["Besichtigungen", "Wir prüfen Interessenten vorab und übernehmen alle Termine."],
+    ["Abschluss", "Begleitung bis zum Notartermin bzw. zur Mietvertragsunterzeichnung."]
+  ],
+  why: [
+    "Wir kennen den Markt in den Elbvororten und im Alstertal aus eigenen Bau- und Sanierungsprojekten.",
+    "Sanierungsbedarf? Wir schätzen Kosten realistisch ein – oder setzen die Arbeiten vor dem Verkauf direkt um.",
+    "Persönliche Betreuung von der Bewertung bis zum Notartermin.",
+    "Erlaubnis nach § 34c GewO"
+  ]
+};
+
+// ---------------------------------------------------------------------------
+// Hausverwaltung
+// ---------------------------------------------------------------------------
+export const management = {
+  usps: ["Eigene Handwerker für Reparaturen", "Fester Ansprechpartner", "Transparente Abrechnung"],
+  facts: [["[XXX]", "verwaltete Einheiten in Hamburg [Platzhalter]"], ["[XX] h", "durchschnittliche Reaktionszeit bei Schäden [Platzhalter]"], ["[XX] Jahre", "Erfahrung in Bau & Immobilien [Platzhalter]"]],
+  miet: [
+    ["Mieterauswahl & Vermietung", "Exposé, Besichtigungen, Bonitätsprüfung und Mietvertrag – wir finden zuverlässige Mieter."],
+    ["Mietinkasso & Buchhaltung", "Mieteingänge überwachen, Mahnwesen, Kautionen und monatliche Abrechnung an Sie."],
+    ["Nebenkostenabrechnung", "Fristgerecht, nachvollziehbar und rechtssicher – inklusive Rückfragen der Mieter."],
+    ["Instandhaltung mit eigenen Handwerkern", "Kleinreparaturen bis Sanierung ohne Fremdfirmen – ein Anruf genügt."]
+  ],
+  weg: [
+    ["Eigentümerversammlung", "Einladung, Durchführung, Protokoll und Umsetzung der Beschlüsse."],
+    ["Wirtschaftsplan & Jahresabrechnung", "Transparente Planung und Abrechnung für die Gemeinschaft und jeden Eigentümer."],
+    ["Rücklagen & Finanzen", "Verwaltung der Erhaltungsrücklage, Zahlungsverkehr und Belegprüfung."],
+    ["Instandhaltung & Sanierung", "Gemeinschaftseigentum pflegen und modernisieren – mit unseren eigenen Handwerkern."]
+  ],
+  benefits: [
+    ["Schnelle Reparaturen", "Eigene Fachleute für Sanitär, Elektro, Maler und mehr – ohne Wartezeit auf Fremdfirmen.", "M13 2L4 14h7l-1 8 9-12h-7l1-8z"],
+    ["Ein Ansprechpartner", "Verwaltung, Abrechnung und Handwerk laufen bei einer Person zusammen.", "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2 M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"],
+    ["Transparente Kosten", "Jeder Auftrag mit Positionen in der Abrechnung – keine versteckten Aufschläge.", "M4 4h12l4 4v12H4z M8 12h8 M8 16h5"],
+    ["Werterhalt", "Regelmäßige Begehungen und Instandhaltungsplanung sichern den Wert Ihrer Immobilie.", "M4 21V10l8-6 8 6v11 M3 21h18 M10 21v-5h4v5"]
+  ],
+  steps: [
+    ["Erstgespräch", "Objekt, Einheiten und Ihre Erwartungen – persönlich oder telefonisch."],
+    ["Angebot & Vertrag", "Transparentes Angebot mit allen Leistungen; Kündigung des bisherigen Verwalters begleiten wir."],
+    ["Übernahme", "Unterlagen, Konten und Mieterkontakte übernehmen – ab Stichtag sind wir Ihr Ansprechpartner."]
+  ],
+  faq: [
+    ["Verwalten Sie auch einzelne Eigentumswohnungen?", "[prüfen] Ja – als Sondereigentumsverwaltung für Vermieter, die ihre Wohnung in einer WEG vermieten."],
+    ["Was kostet die Hausverwaltung?", "Die Vergütung richtet sich nach Art und Anzahl der Einheiten. [Platzhalter: Preismodell einsetzen]. Sie erhalten vorab ein schriftliches Angebot."],
+    ["Wie schnell kommt bei einem Schaden jemand?", "Notfälle wie Wasserschäden oder Heizungsausfall bearbeiten wir vorrangig mit eigenen Handwerkern. [Platzhalter: Reaktionszeit und Notfallnummer]."],
+    ["Wie läuft der Wechsel von der bisherigen Verwaltung?", "Wir prüfen Ihren bestehenden Vertrag, kümmern uns um die Übergabe der Unterlagen und informieren Mieter bzw. Eigentümer über den Wechsel."]
+  ]
+};
+
+// ---------------------------------------------------------------------------
+// Kontakt – Anliegen (Schritt 1) mit Platzhaltertext für die Beschreibung
+// [Wert, Untertitel, Icon, URL-Kürzel (?anliegen=…), Beispieltext]
+// ---------------------------------------------------------------------------
+export const contactTopics = [
+  ["Sanierung", "Bad, Altbau, Komplettsanierung oder einzelne Gewerke", "M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z", "sanierung", "z. B. 3-Zimmer-Altbau, 80 m², neues Bad und neue Böden"],
+  ["Neubau", "Haus bauen – mit oder ohne Grundstück", "M3 21h18 M5 21V9l7-5 7 5v12 M9 21v-6h6v6", "neubau", "z. B. Einfamilienhaus mit Keller, ca. 150 m², Grundstück in Poppenbüttel"],
+  ["Verkaufen / Vermieten", "Immobilie vermarkten oder bewerten lassen", "M4 7h16v13H4z M8 7V4h8v3 M9 13h6", "verkaufen", "z. B. Reihenhaus Bj. 1975, 120 m², vermietet bis Mitte nächsten Jahres"],
+  ["Immobilie suchen", "Kaufen oder mieten in Hamburg und Umgebung", "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14z M21 21l-5-5", "suchen", "z. B. 4 Zimmer mit Garten, Nähe Elbe oder Alster"]
 ];

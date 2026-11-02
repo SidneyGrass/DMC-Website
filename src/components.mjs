@@ -1,65 +1,76 @@
 // Wiederverwendbare Bausteine: Header, Footer, CTA, Seitenkopf, Platzhalter …
-import { site, icons, services } from "./content.mjs";
+import { site, icons, menu, footerLinks } from "./content.mjs";
 
 export const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 export const icon = (d, { size = 24, stroke = "currentColor", width = 1.6, cls = "" } = {}) =>
   `<svg aria-hidden="true"${cls ? ` class="${cls}"` : ""} width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
 
+const IMG = "/img/dmc/";
+export const imgSrc = (key) => IMG + key + ".jpg";
+
 export const check = (txt) => `<li>${icon(icons.check, { size: 18, stroke: "#8A6A33", width: 2.2 })}<span>${txt}</span></li>`;
 
-const sealMini = `<svg class="brand__seal" aria-hidden="true" viewBox="0 0 100 100"><rect width="100" height="100" rx="4" fill="#5E6568"/><path d="M24 18V76H82" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linejoin="miter"/><g stroke="#5E6568" stroke-width="1.4"><line x1="24" y1="28" x2="27.5" y2="28"/><line x1="24" y1="38" x2="27.5" y2="38"/><line x1="24" y1="48" x2="27.5" y2="48"/><line x1="24" y1="58" x2="27.5" y2="58"/><line x1="36" y1="72.5" x2="36" y2="76"/><line x1="48" y1="72.5" x2="48" y2="76"/><line x1="60" y1="72.5" x2="60" y2="76"/><line x1="72" y1="72.5" x2="72" y2="76"/></g><text x="57" y="60" text-anchor="middle" font-family="Jost, system-ui, sans-serif" font-weight="500" font-size="24" letter-spacing="3" fill="#C7A56A">HH</text></svg>`;
-
-const footerMark = `<svg class="footer-mark" role="img" aria-label="Bauwerk HH" viewBox="0 0 100 100"><rect width="100" height="100" rx="4" fill="#FFFFFF"/><path d="M24 18V76H82" fill="none" stroke="#5E6568" stroke-width="7" stroke-linejoin="miter"/><text x="57" y="60" text-anchor="middle" font-family="Jost, system-ui, sans-serif" font-weight="600" font-size="24" letter-spacing="3" fill="#8A6A33">HH</text></svg>`;
-
-export const sealFull = (color = "#FFFFFF", accent = "#C7A56A", size = 96, id = "seal", cls = "") => `<svg role="img" aria-label="Bauwerk HH Siegel"${cls ? ` class="${cls}"` : ""} width="${size}" height="${size}" viewBox="0 0 120 120">
-<defs><path id="${id}Top" d="M21 60A39 39 0 1 1 99 60"/><path id="${id}Bot" d="M13 60A47 47 0 0 0 107 60"/></defs>
-<circle cx="60" cy="60" r="56" fill="none" stroke="${color}" stroke-width="1.6"/><circle cx="60" cy="60" r="52" fill="none" stroke="${color}" stroke-width="0.6"/><circle cx="60" cy="60" r="34" fill="none" stroke="${color}" stroke-width="0.8"/>
-<text font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="11" letter-spacing="2.5" fill="${color}"><textPath href="#${id}Top" startOffset="50%" text-anchor="middle">BAUWERK HH</textPath></text>
-<text font-family="Archivo, system-ui, sans-serif" font-weight="600" font-size="6.5" letter-spacing="1.6" fill="${accent}"><textPath href="#${id}Bot" startOffset="50%" text-anchor="middle">KERNSANIERUNG · NEUBAU</textPath></text>
-<circle cx="17" cy="64" r="1.6" fill="${accent}"/><circle cx="103" cy="64" r="1.6" fill="${accent}"/>
-<text x="60" y="71" text-anchor="middle" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="32" fill="${color}">B</text>
-<line x1="50" y1="78" x2="70" y2="78" stroke="${accent}" stroke-width="1"/></svg>`;
-
 // ---------------------------------------------------------------------------
-const nav = [
-  ["leistung", "Leistungen", "/leistungen"],
-  ["referenzen", "Referenzen", "/referenzen"],
-  ["ablauf", "Ablauf", "/ablauf"],
-  ["ueber", "Über uns", "/ueber-uns"],
-  ["ratgeber", "Ratgeber", "/ratgeber"],
-  ["kontakt", "Kontakt", "/kontakt"]
-];
+// Header mit Mega-Menü (Desktop) und Akkordeon-Menü (Tablet/Phone)
+// active: "bauen" | "immobilien" | "referenzen" | "ueber" | "kontakt" | "ratgeber" | "karriere" | "einsatzgebiet"
+// ---------------------------------------------------------------------------
+const navLinks = [["referenzen", "Referenzen", "/referenzen"], ["ueber", "Über uns", "/ueber-uns"], ["kontakt", "Kontakt", "/kontakt"]];
+const topLinks = [["ratgeber", "Ratgeber", "/ratgeber"], ["karriere", "Karriere", "/karriere"], ["einsatzgebiet", "Einsatzgebiet", "/einsatzgebiet"]];
+const mobLinks = [["referenzen", "Referenzen", "/referenzen"], ["ueber", "Über uns", "/ueber-uns"], ["ratgeber", "Ratgeber", "/ratgeber"], ["karriere", "Karriere", "/karriere"], ["kontakt", "Kontakt", "/kontakt"]];
+const megaKeys = ["bauen", "immobilien"];
+
+function megaPanel(key) {
+  const m = menu[key];
+  const col = (title, list) => `<div class="mega__col"><strong class="mega__title">${title}</strong>${list.map(([l, h]) => `<a href="${h}">${esc(l)}</a>`).join("")}</div>`;
+  return `<div class="mega" id="mega-${key}" hidden>
+    <div class="container mega__inner">
+      <button type="button" class="icon-btn mega__close" data-mega-close aria-label="Menü ${esc(m.label)} schließen">${icon(icons.close, { size: 18, width: 2 })}</button>
+      <div class="mega__grid">
+        ${col(m.col1Title, m.col1)}
+        ${col(m.col2Title, m.col2)}
+        <div class="mega__teaser">
+          <img src="${IMG}${m.teaserImg}.jpg" alt="${esc(m.teaserAlt)}" width="400" height="150" loading="lazy" decoding="async">
+          <span class="mega__teaser-title">${m.teaserTitle}</span>
+          <span class="mega__teaser-text">${m.teaserText}</span>
+          <a class="link-arrow" href="${m.extra[1]}">${m.extra[0]}</a>
+          <a class="btn btn--primary" href="${m.cta[1]}">${m.cta[0]}</a>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
 
 export function header(active = "") {
-  const cur = (k) => (k === active ? ' class="is-active" aria-current="page"' : "");
-  const desk = nav.map(([k, label, href]) => {
-    if (k === "leistung") {
-      return `<div class="nav-drop"><a href="${href}"${cur(k)}>${label}</a><div class="nav-drop__menu">${services.map((s) => `<a href="/leistungen/${s.slug}">${s.title}</a>`).join("")}<a class="nav-drop__all" href="/leistungen">Alle Leistungen im Überblick →</a></div></div>`;
-    }
-    return `<a href="${href}"${cur(k)}>${label}</a>`;
-  }).join("");
-  const mob = nav.map(([k, label, href]) => {
-    const link = `<a class="mobile-menu__link" href="${href}">${label}</a>`;
-    if (k === "leistung") return link + `<div class="mobile-menu__sub">${services.map((s) => `<a href="/leistungen/${s.slug}">${s.title}</a>`).join("")}</div>`;
-    return link;
-  }).join("") + `<a class="mobile-menu__link" href="/karriere">Karriere</a>`;
+  const cur = (k) => (k === active ? ' aria-current="page"' : "");
+  const isOn = (k) => (k === active ? " is-active" : "");
+  const chevron = icon(icons.chevronDown, { size: 14, width: 2.2, cls: "chevron" });
+  const desk = megaKeys.map((k) => `<button type="button" class="main-nav__btn${isOn(k)}" aria-expanded="false" aria-controls="mega-${k}" data-mega-toggle>${esc(menu[k].label)}${chevron}</button>`).join("")
+    + navLinks.map(([k, label, href]) => `<a class="main-nav__link${isOn(k)}" href="${href}"${cur(k)}>${label}</a>`).join("");
+  const acc = (k) => {
+    const m = menu[k];
+    const list = k === "bauen" ? [...m.col1, ...m.col2, m.extra] : [...m.col1, ...m.col2];
+    return `<button type="button" class="mobile-menu__acc${isOn(k)}" aria-expanded="false" aria-controls="m-${k}" data-acc>${esc(m.label)}${icon(icons.chevronDown, { size: 20, width: 2.2, stroke: "#8A6A33", cls: "chevron" })}</button>
+    <div class="mobile-menu__sub" id="m-${k}" hidden>${list.map(([l, h]) => `<a href="${h}">${esc(l)}</a>`).join("")}</div>`;
+  };
+  const mob = megaKeys.map(acc).join("") + mobLinks.map(([k, label, href]) => `<a class="mobile-menu__link" href="${href}"${cur(k)}>${label}</a>`).join("");
 
   return `<a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
-<div class="topbar"><div class="container"><span>[Meisterbetrieb – nur mit Nachweis] · Hamburg &amp; Umland · Rückmeldung in ${site.responseShort}</span><span class="topbar__links"><a href="${site.whatsapp}" target="_blank" rel="noopener">WhatsApp</a><a href="/karriere">Karriere</a></span></div></div>
+<div class="topbar"><div class="container"><span>Eigene Handwerker · fester Ansprechpartner · Hamburg &amp; Umland</span><nav class="topbar__links" aria-label="Servicenavigation">${topLinks.map(([k, l, h]) => `<a href="${h}"${cur(k)}>${l}</a>`).join("")}<a href="${site.whatsapp}" target="_blank" rel="noopener">WhatsApp</a></nav></div></div>
 <header class="site-header">
   <div class="container site-header__bar">
     <a class="brand" href="/" aria-label="DMC Immobilien – zur Startseite"><img class="brand__logo" src="/img/dmc/dmc-logo-grau.svg" alt="DMC Immobilien" width="247" height="186"></a>
     <nav class="main-nav" aria-label="Hauptnavigation">${desk}</nav>
     <div class="header-actions">
       <a class="header-phone" href="${site.phoneHref}">${icon(icons.phone, { size: 18, width: 1.8 })}${site.phoneDisplay}</a>
-      <a class="btn btn--primary btn--sm" href="/kontakt">Kostenlos anfragen</a>
+      <a class="btn btn--primary btn--sm" href="/kontakt">Anfragen</a>
     </div>
     <div class="header-mobile">
       <a class="icon-btn" href="${site.phoneHref}" aria-label="Anrufen">${icon(icons.phone, { size: 20, width: 1.8 })}</a>
-      <button class="icon-btn icon-btn--solid" type="button" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="Menü öffnen">${icon("M4 7h16M4 12h16M4 17h16", { size: 22, width: 2 })}</button>
+      <button class="icon-btn icon-btn--solid" type="button" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="Menü öffnen">${icon(icons.menu, { size: 22, width: 2 })}</button>
     </div>
   </div>
+  ${megaKeys.map(megaPanel).join("\n  ")}
   <nav class="mobile-menu" id="mobile-menu" aria-label="Mobiles Menü">
     ${mob}
     <div class="mobile-menu__actions">
@@ -71,32 +82,21 @@ export function header(active = "") {
 }
 
 export function footer() {
+  const col = (title, aria, list) => `<nav class="footer-col" aria-label="${aria}"><h2>${title}</h2><div class="footer-links">${list.map(([l, h]) => `<a href="${h}">${esc(l)}</a>`).join("")}</div></nav>`;
   return `<footer class="site-footer">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-col footer-col--wide">
         <div class="footer-brand"><img class="footer-logo" src="/img/dmc/dmc-logo-weiss.svg" alt="DMC Immobilien" width="247" height="186" loading="lazy"></div>
-        <span>Kernsanierung und Neubau aus einer Hand – für Hamburg und das Umland.</span>
+        <span>Bauen, sanieren und Immobilien – aus einer Hand in Hamburg.</span>
         <span>${site.legal}<br>${site.street}<br>${site.zip} ${site.city}</span>
-        <span><a href="${site.phoneHref}"><strong>${site.phoneDisplay}</strong></a><br><a href="${site.emailHref}">${site.email}</a><br><a href="${site.instagram}" target="_blank" rel="noopener">Instagram @dmcimmobilien</a></span>
+        <span class="footer-contact"><a href="${site.phoneHref}"><strong>${site.phoneDisplay}</strong></a><a href="${site.emailHref}">${site.email}</a><a href="${site.instagram}" target="_blank" rel="noopener">${icon(icons.instagram, { size: 18, width: 1.8 })}Instagram @dmcimmobilien</a></span>
+        <span class="footer-rating"><strong>★ ${site.rating}</strong><span>aus ${site.reviews} Google-Bewertungen</span></span>
         <span style="font-size:14px">${site.hours}</span>
       </div>
-      <nav class="footer-col" aria-label="Leistungen">
-        <h2>Leistungen</h2>
-        <div class="footer-links">${services.map((s) => `<a href="/leistungen/${s.slug}">${s.title}</a>`).join("")}</div>
-      </nav>
-      <nav class="footer-col" aria-label="Unternehmen">
-        <h2>Unternehmen</h2>
-        <div class="footer-links footer-links--1">
-          <a href="/ueber-uns">Über uns</a><a href="/referenzen">Referenzen</a><a href="/ablauf">Ablauf</a><a href="/ratgeber">Ratgeber</a><a href="/karriere">Karriere</a><a href="/einsatzgebiet">Einsatzgebiet</a><a href="/kontakt">Kontakt</a>
-        </div>
-      </nav>
-      <div class="footer-col footer-col--wide">
-        <h2>Vertrauen</h2>
-        <span class="footer-rating">★ ${site.rating}</span>
-        <span style="font-size:14px">${site.reviews} Google-Bewertungen</span>
-        <div class="badges"><span class="badge-box">HWK</span><span class="badge-box">Innung</span></div>
-      </div>
+      ${col("Bauen &amp; Sanieren", "Bauen und Sanieren", footerLinks.bauen)}
+      ${col("Immobilien", "Immobilien", footerLinks.immobilien)}
+      ${col("Unternehmen", "Unternehmen", footerLinks.unternehmen)}
     </div>
     <div class="footer-bottom">
       <span>© ${new Date().getFullYear()} ${site.legal} · ${site.hrb}</span>
@@ -117,19 +117,20 @@ export function footer() {
     <label><input type="checkbox" id="c-stat"> <span><strong style="font-family:var(--sans);font-size:14px">Statistik</strong> – anonyme Nutzungsstatistik [Tool prüfen].</span></label>
   </div>
   <div class="cookie__btns"><button type="button" class="btn btn--outline" data-cookie="deny">Ablehnen</button><button type="button" class="btn btn--primary" data-cookie="accept">Alle akzeptieren</button></div>
-  <button type="button" class="link-btn" style="color:var(--blau);font-size:14px;align-self:center" data-cookie="settings">Einstellungen</button>
+  <button type="button" class="link-btn" style="color:var(--blau);font-size:14px;align-self:center;min-height:44px" data-cookie="settings">Einstellungen</button>
 </div>`;
 }
 
-export function ctaBand(heading = "Ihr Projekt in Hamburg?", lead = `Erzählen Sie uns kurz, was Sie vorhaben. Wir melden uns innerhalb von ${site.response} – kostenlos und unverbindlich.`, href = "/kontakt") {
+// Abschluss-CTA (weißer Text auf #5E6568, Telefon/WhatsApp mobil über die Aktionsleiste)
+export function ctaBand(heading = "Ihr Projekt in Hamburg?", lead = `Erzählen Sie uns kurz, was Sie vorhaben. Wir melden uns innerhalb von ${site.response} – kostenlos und unverbindlich.`, href = "/kontakt", { label = "Projekt anfragen", buttons = "" } = {}) {
   return `<section class="cta-band"><div class="container">
   <span class="cta-band__line" aria-hidden="true"></span>
   <h2>${heading}</h2>
   <p>${lead}</p>
   <div class="cta-band__btns">
-    <a class="btn btn--light" href="${href}">Projekt anfragen</a>
-    <a class="btn btn--outline-gold" href="${site.phoneHref}">${site.phoneDisplay}</a>
-    <a class="btn btn--outline-gold" href="${site.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>
+    <a class="btn btn--light" href="${href}">${label}</a>
+    ${buttons || `<a class="btn btn--outline-light btn--hide-phone" href="${site.phoneHref}">${site.phoneDisplay}</a>
+    <a class="btn btn--outline-light btn--hide-phone" href="${site.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>`}
   </div>
 </div></section>`;
 }
@@ -150,7 +151,6 @@ export function pageHead({ crumbs, eyebrow, heading, lead }) {
 }
 
 // DMC-Bilder (von dmc-realestate.de) – Zuordnung über die Bildbeschreibung
-const IMG = "/img/dmc/";
 const RULES = [
   [/karte/i, null],
   [/geschäftsführung|inhaber/i, "inhaber"],
@@ -229,7 +229,7 @@ export { afterFor };
 
 export function refCard(p, { bordered = false } = {}) {
   return `<a class="ref-card${bordered ? " ref-card--bordered" : ""}" href="/referenzen/${p.slug}">
-  ${beforeAfter({ small: true, after: afterFor(p) })}
+  ${p.img ? ph(p.title, { img: p.img, h: "240px" }) : beforeAfter({ small: true, after: afterFor(p) })}
   <span class="ref-card__body"><span class="ref-card__tag">${p.cat}</span><span class="ref-card__title">${p.title}</span><span class="ref-card__meta">${p.meta}</span></span>
 </a>`;
 }
@@ -240,32 +240,40 @@ export function quoteCard(meta) {
 
 export const lightbox = `<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Bildansicht"><button class="lightbox__close" type="button" aria-label="Schließen">×</button><div class="lightbox__inner">${ph("Foto", { h: "min(70vh, 620px)" })}<p class="lightbox__cap"></p></div></div>`;
 
-// Statische Karte Hamburg (schematisch, kein Maps-Embed)
+// Statische Karte Hamburg (schematisch, kein Maps-Embed) – alle Bezirke sind Einsatzgebiet,
+// Elbvororte Ottensen–Blankenese einzeln, Firmensitz im Alstertal.
 export function hamburgMap() {
-  const d = [
-    ["Altona", "M70 150 L150 120 L190 170 L170 230 L90 240 L50 200 Z", 120, 185, false],
-    ["Eimsbüttel", "M150 120 L170 50 L240 40 L260 110 L230 160 L190 170 Z", 205, 105, true],
-    ["Hamburg-Nord", "M240 40 L330 30 L360 110 L300 150 L260 110 Z", 300, 85, true],
-    ["Wandsbek", "M330 30 L450 40 L470 150 L400 190 L360 110 Z", 410, 105, true],
-    ["Hamburg-Mitte", "M190 170 L230 160 L260 110 L300 150 L360 110 L400 190 L360 250 L250 270 L170 230 Z", 285, 210, false],
-    ["Bergedorf", "M400 190 L470 150 L540 220 L500 300 L400 290 L360 250 Z", 455, 240, false],
-    ["Alstertal", "M292 33 L330 30 L450 40 L438 -12 L318 -16 Z", 375, 14, false]
+  const areas = [
+    "M18 252 L92 238 L102 304 L22 312 Z", "M92 238 L146 230 L156 300 L102 304 Z", "M92 190 L190 178 L196 226 L146 230 L92 238 Z",
+    "M146 230 L196 226 L204 296 L156 300 Z", "M196 226 L246 220 L254 290 L204 296 Z", "M190 178 L262 166 L272 214 L246 220 L196 226 Z",
+    "M180 100 L276 86 L292 160 L262 166 L190 178 Z", "M262 166 L362 150 L420 200 L402 272 L254 290 L246 220 L272 214 Z",
+    "M276 86 L380 72 L396 140 L362 150 L292 160 Z", "M330 22 L472 16 L484 72 L380 72 L334 64 Z",
+    "M380 72 L484 72 L542 150 L472 210 L420 200 L362 150 L396 140 Z", "M472 210 L542 150 L622 230 L584 296 L462 290 L402 272 L420 200 Z"
   ];
-  return `<div class="map-card"><svg viewBox="0 0 580 400" role="img" aria-label="Schematische Karte der Hamburger Bezirke mit Kerngebieten">
-  <rect x="0" y="0" width="580" height="400" fill="#ECEEEF"/>
-  <g transform="translate(0,46)"><path d="M0 268 C 90 250, 150 262, 230 262 S 380 238, 580 268 L580 286 C 420 262, 330 286, 230 282 S 80 270, 0 288 Z" fill="#D3D7D8" opacity=".9"/>
-  ${d.map(([n, p, x, y, core]) => `<path d="${p}" fill="${core ? "#C7A56A" : "#FFFFFF"}" fill-opacity="${core ? ".55" : "1"}" stroke="#5E6568" stroke-width="1.2"/><text x="${x}" y="${y}" text-anchor="middle" font-family="Archivo, sans-serif" font-size="12" font-weight="600" fill="#2F3437">${n}</text>`).join("")}
-  </g><g transform="translate(0,46)"><circle cx="205" cy="128" r="6" fill="#5E6568" stroke="#fff" stroke-width="2"/><text x="205" y="148" text-anchor="middle" font-family="Archivo, sans-serif" font-size="10" fill="#5E6568">[Firmensitz]</text></g>
-  <text x="290" y="20" text-anchor="middle" font-family="Archivo, sans-serif" font-size="11" fill="#565C5F">Umland bis ca. [XX] km</text>
-</svg><div class="map-card__legend"><span><i style="background:#E2CFA9"></i>Kerngebiet</span><span><i style="background:#fff;border:1px solid #5E6568"></i>Einsatzgebiet</span><span><i style="background:#5E6568;border-radius:99px"></i>Firmensitz</span></div></div>`;
+  const small = [[58, 280, "Blankenese"], [126, 268, "Nien-"], [126, 280, "stedten"], [142, 212, "Groß Flottbek"], [180, 262, "Oth-"], [180, 274, "marschen"], [226, 262, "Ottensen"]];
+  const big = [[230, 202, "Altona"], [234, 136, "Eimsbüttel"], [334, 118, "Hamburg-Nord"], [330, 232, "Hamburg-Mitte"], [410, 40, "Alstertal"], [458, 140, "Wandsbek"], [520, 250, "Bergedorf"]];
+  return `<div class="map-card"><svg viewBox="0 0 640 380" role="img" aria-label="Schematische Karte von Hamburg: alle dargestellten Bezirke einschließlich der Elbvororte von Ottensen bis Blankenese sind Einsatzgebiet, Firmensitz im Alstertal" font-family="Archivo, system-ui, sans-serif">
+  <rect x="0" y="0" width="640" height="380" fill="#ECEEEF"/>
+  <path d="M0 318 C 80 300, 150 312, 240 304 S 420 286, 640 300 L640 326 C 470 312, 380 330, 250 330 S 90 330, 0 344 Z" fill="#D3D7D8"/>
+  <text x="560" y="322" font-size="11" font-style="italic" fill="#565C5F">Elbe</text>
+  ${areas.map((d) => `<path d="${d}" fill="#C7A56A" fill-opacity="0.6" stroke="#5E6568" stroke-width="1.2"/>`).join("")}
+  <g font-size="11" font-weight="700" fill="#2F3437" text-anchor="middle">${small.map(([x, y, t]) => `<text x="${x}" y="${y}">${t}</text>`).join("")}</g>
+  <g font-size="15" font-weight="700" fill="#2F3437" text-anchor="middle">${big.map(([x, y, t]) => `<text x="${x}" y="${y}">${t}</text>`).join("")}</g>
+  <circle cx="412" cy="56" r="7" fill="#2F3437" stroke="#FFFFFF" stroke-width="2.5"/>
+  <line x1="419" y1="56" x2="500" y2="56" stroke="#2F3437" stroke-width="1"/>
+  <rect x="500" y="44" width="128" height="24" rx="2" fill="#2F3437"/>
+  <text x="564" y="60" font-size="11" font-weight="600" fill="#FFFFFF" text-anchor="middle">Firmensitz DMC</text>
+  <path d="M22 350 L22 358 L250 358 L250 350" fill="none" stroke="#8A6A33" stroke-width="1.2"/>
+  <text x="136" y="373" font-size="11" font-weight="600" fill="#6E5428" text-anchor="middle">Elbvororte: Ottensen bis Blankenese</text>
+</svg><div class="map-card__legend"><span><i class="map-card__key"></i>Unser Einsatzgebiet – inklusive Elbvororte (Ottensen bis Blankenese) und Alstertal</span><span><i class="map-card__key map-card__key--pin"></i>Firmensitz: ${site.street}, ${site.zip} ${site.city}</span></div></div>`;
 }
 
 // ---------------------------------------------------------------------------
 export function layout({ title, description, path = "/", active = "", body, schema = [], noindex = false }) {
-  const full = path === "/" ? `${site.name} – Sanierung & Handwerk in Hamburg` : `${title} | ${site.name}`;
+  const full = path === "/" ? `${site.name} – Bauen, Sanieren & Immobilien in Hamburg` : `${title} | ${site.name}`;
   const canonical = site.url + (path === "/" ? "" : path);
   const org = {
-    "@context": "https://schema.org", "@type": "HomeAndConstructionBusiness", name: site.name, url: site.url,
+    "@context": "https://schema.org", "@type": ["HomeAndConstructionBusiness", "RealEstateAgent"], name: site.name, url: site.url,
     telephone: site.phoneDisplay, email: site.email, areaServed: "Hamburg",
     address: { "@type": "PostalAddress", streetAddress: site.street, postalCode: site.zip, addressLocality: site.city, addressCountry: "DE" }
   };

@@ -28,7 +28,7 @@ const page = (path, html) => pages.push([path, html]);
 <section class="hero"><div class="container grid-2">
   <div class="hero__text">
     <span class="eyebrow">Kernsanierung &amp; Neubau in Hamburg</span>
-    <h1 class="h1" style="color:#C0262D">Sanierung in Hamburg – aus einer Hand, sauber und termintreu.</h1>
+    <h1 class="h1">Sanierung in Hamburg – aus einer Hand, sauber und termintreu.</h1>
     <p class="lead">Wir sanieren Wohnungen und Häuser in Hamburg und Umgebung: komplett mit allen Gewerken oder genau das, was Sie brauchen – vom Bad bis zur Fassade.</p>
     <div class="hero__ctas"><a class="btn btn--primary btn--block-mobile" href="/kontakt">Kostenlos anfragen</a><a class="link-arrow" href="/referenzen">Referenzen ansehen</a></div>
     <ul class="check-list">${check("Fester Ansprechpartner")}${check("Schriftliches Angebot")}${check("[Meisterbetrieb – nur mit Nachweis]")}</ul>

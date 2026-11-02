@@ -1,17 +1,17 @@
-// Bauwerk HH – zentrale Inhalte
+// DMC Immobilien – zentrale Inhalte
 // Alle Angaben in [eckigen Klammern] und mit „[prüfen]“ vor dem Livegang mit echten Werten füllen.
 
 export const site = {
-  name: "Bauwerk HH",
-  legal: "Bauwerk HH [Rechtsform]",
-  url: "https://bauwerk-hh.vercel.app",
-  phoneDisplay: "[040 000 000]",
-  phoneHref: "tel:+490000000",
+  name: "DMC Immobilien",
+  legal: "DMC Immobilien GmbH",
+  url: "https://dmc-website-hazel.vercel.app",
+  phoneDisplay: "040 22 63 19 620",
+  phoneHref: "tel:+4940226319620",
   whatsapp: "https://wa.me/490000000",
-  email: "info@[domain].de",
-  emailHref: "mailto:info@example.de",
-  street: "[Straße Nr.]",
-  zip: "[PLZ]",
+  email: "info@dmc-realestate.de",
+  emailHref: "mailto:info@dmc-realestate.de",
+  street: "Am Bronzehügel 101",
+  zip: "22399",
   city: "Hamburg",
   hours: "Mo–Fr [7–17 Uhr]",
   response: "[24 Stunden]",
@@ -19,6 +19,10 @@ export const site = {
   rating: "[4,9]",
   reviews: "[XX]",
   contactName: "[Name]",
+  managers: "Danilo Del Favero, Tomasz Gajda",
+  hrb: "HRB 187765",
+  vatId: "DE369943159",
+  instagram: "https://www.instagram.com/dmcimmobilien",
   // Formular-Endpunkt (z. B. Formspree/Getform). "#" = Demo ohne Versand.
   formEndpoint: "#"
 };

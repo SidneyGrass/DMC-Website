@@ -77,8 +77,8 @@ export function footer() {
       <div class="footer-col footer-col--wide">
         <div class="footer-brand"><img class="footer-logo" src="/img/dmc/dmc-logo-weiss.svg" alt="DMC Immobilien" width="247" height="186" loading="lazy"></div>
         <span>Kernsanierung und Neubau aus einer Hand – für Hamburg und das Umland.</span>
-        <span>${site.street}<br>${site.zip} ${site.city}</span>
-        <span><a href="${site.phoneHref}"><strong>${site.phoneDisplay}</strong></a><br><a href="${site.emailHref}">${site.email}</a></span>
+        <span>${site.legal}<br>${site.street}<br>${site.zip} ${site.city}</span>
+        <span><a href="${site.phoneHref}"><strong>${site.phoneDisplay}</strong></a><br><a href="${site.emailHref}">${site.email}</a><br><a href="${site.instagram}" target="_blank" rel="noopener">Instagram @dmcimmobilien</a></span>
         <span style="font-size:14px">${site.hours}</span>
       </div>
       <nav class="footer-col" aria-label="Leistungen">
@@ -99,7 +99,7 @@ export function footer() {
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© ${new Date().getFullYear()} ${site.legal}</span>
+      <span>© ${new Date().getFullYear()} ${site.legal} · ${site.hrb}</span>
       <nav aria-label="Rechtliches"><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a><button type="button" class="link-btn" data-cookie-open>Cookie-Einstellungen</button></nav>
     </div>
   </div>

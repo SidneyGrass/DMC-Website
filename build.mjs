@@ -1,4 +1,4 @@
-// Bauwerk HH – statischer Seitengenerator
+// DMC Immobilien – statischer Seitengenerator
 // Aufruf: node build.mjs  → erzeugt den Ordner dist/ (wird von Vercel ausgeliefert)
 import { mkdirSync, writeFileSync, rmSync, cpSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -60,7 +60,7 @@ const page = (path, html) => pages.push([path, html]);
 <section class="section"><div class="container grid-2">
   ${ph("Teamfoto auf der Baustelle (echtes Team, kein Stockfoto)", { h: "clamp(240px, 40vw, 520px)" })}
   <div class="stack" style="gap:28px">
-    <div><span class="eyebrow" style="margin-bottom:12px">Warum Bauwerk HH</span><h2 class="h2">Handwerk, auf das Sie sich verlassen können.</h2></div>
+    <div><span class="eyebrow" style="margin-bottom:12px">Warum DMC Immobilien</span><h2 class="h2">Handwerk, auf das Sie sich verlassen können.</h2></div>
     <div class="why-grid">
       <div class="why-item"><strong>Komplett aus einer Hand</strong><span>Ein Ansprechpartner koordiniert alle Gewerke und Termine.</span></div>
       <div class="why-item"><strong>Termintreue</strong><span>Ein verbindlicher Zeitplan, den wir gemeinsam mit Ihnen festlegen.</span></div>
@@ -98,7 +98,7 @@ const page = (path, html) => pages.push([path, html]);
     <span class="eyebrow">Über uns</span>
     <h2 class="h2">Hinter jeder Baustelle stehen Menschen.</h2>
     <p class="lead">Wir sind ein Hamburger Team aus [XX] Handwerkerinnen und Handwerkern. Vom ersten Termin bis zur Abnahme haben Sie einen festen Ansprechpartner – und wissen immer, wer bei Ihnen arbeitet.</p>
-    <p class="signature">[Name], Inhaber</p>
+    <p class="signature">Danilo Del Favero &amp; Tomasz Gajda, Geschäftsführung</p>
     <a class="link-arrow" href="/ueber-uns">Lernen Sie uns kennen</a>
   </div>
 </div></section>
@@ -130,7 +130,7 @@ ${pageHead({ crumbs: [["Leistungen"]], eyebrow: "Leistungen", heading: "Unsere L
   <div class="tiles">${services.filter((s) => s.slug !== "komplettsanierung").map((s) => tile(s)).join("")}</div>
 </div></section>
 ${ctaBand("Nicht sicher, was Sie brauchen?", `Beschreiben Sie kurz Ihr Vorhaben – wir beraten Sie kostenlos und melden uns innerhalb von ${site.response}.`)}`;
-  page("/leistungen", layout({ title: "Leistungen", path: "/leistungen", active: "leistung", description: "Alle Leistungen von Bauwerk HH: Komplettsanierung, Altbausanierung, Badsanierung, Malerarbeiten, Elektro, Sanitär & Heizung, energetische Sanierung, Fenster, Boden, Trockenbau.", body }));
+  page("/leistungen", layout({ title: "Leistungen", path: "/leistungen", active: "leistung", description: "Alle Leistungen von DMC Immobilien: Komplettsanierung, Altbausanierung, Badsanierung, Malerarbeiten, Elektro, Sanitär & Heizung, energetische Sanierung, Fenster, Boden, Trockenbau.", body }));
 }
 
 // ===========================================================================
@@ -228,7 +228,7 @@ ${pageHead({ crumbs: [["Referenzen"]], eyebrow: "Referenzen", heading: "Unsere P
   <div class="center"><a class="btn btn--outline btn--block-mobile" href="/kontakt">Ihr Projekt anfragen</a></div>
 </div></section>
 ${ctaBand("Ihr Projekt könnte das nächste sein.", `Erzählen Sie uns, was Sie vorhaben – wir melden uns innerhalb von ${site.response}.`)}`;
-  page("/referenzen", layout({ title: "Referenzen", path: "/referenzen", active: "referenzen", description: "Referenzen von Bauwerk HH: abgeschlossene Sanierungen in Hamburg mit Vorher-Nachher-Fotos, Stadtteil, Umfang und Dauer.", body }));
+  page("/referenzen", layout({ title: "Referenzen", path: "/referenzen", active: "referenzen", description: "Referenzen von DMC Immobilien: abgeschlossene Sanierungen in Hamburg mit Vorher-Nachher-Fotos, Stadtteil, Umfang und Dauer.", body }));
 }
 
 // Projekt-Detailseiten
@@ -271,7 +271,7 @@ projects.forEach((p, i) => {
   <div class="center"><a class="btn btn--primary btn--block-mobile" href="/kontakt?leistung=${encodeURIComponent(svc.form)}">Ähnliches Projekt anfragen</a></div>
 </div></section>
 ${lightbox}`;
-  page(`/referenzen/${p.slug}`, layout({ title: p.title, path: `/referenzen/${p.slug}`, active: "referenzen", description: `Referenzprojekt von Bauwerk HH: ${p.title} – ${p.gewerke}. Vorher-Nachher, Umfang und Dauer.`, body }));
+  page(`/referenzen/${p.slug}`, layout({ title: p.title, path: `/referenzen/${p.slug}`, active: "referenzen", description: `Referenzprojekt von DMC Immobilien: ${p.title} – ${p.gewerke}. Vorher-Nachher, Umfang und Dauer.`, body }));
 });
 
 // ===========================================================================
@@ -293,7 +293,7 @@ ${pageHead({ crumbs: [["Ablauf"]], eyebrow: "Ablauf", heading: "So läuft Ihre S
 </div></section>
 <section class="section section--sand"><div class="container container--narrow"><h2 class="h2" style="margin-bottom:24px">Fragen zum Ablauf</h2>${faq(processFaq)}</div></section>
 ${ctaBand("Bereit für den ersten Schritt?", `Die Anfrage dauert zwei Minuten. Wir melden uns innerhalb von ${site.response} für einen Termin vor Ort.`)}`;
-  page("/ablauf", layout({ title: "Ablauf", path: "/ablauf", active: "ablauf", description: "So läuft Ihre Sanierung mit Bauwerk HH ab: von der Anfrage über Besichtigung und Angebot bis zur Abnahme – mit festem Ansprechpartner.", body, schema: [faqSchema(processFaq)] }));
+  page("/ablauf", layout({ title: "Ablauf", path: "/ablauf", active: "ablauf", description: "So läuft Ihre Sanierung mit DMC Immobilien ab: von der Anfrage über Besichtigung und Angebot bis zur Abnahme – mit festem Ansprechpartner.", body, schema: [faqSchema(processFaq)] }));
 }
 
 // ===========================================================================
@@ -308,10 +308,10 @@ ${ctaBand("Bereit für den ersten Schritt?", `Die Anfrage dauert zwei Minuten. W
 </div></section>
 <section class="section section--sand"><div class="container grid-2 grid-2--story">
   <div class="stack"><span class="eyebrow">Unsere Geschichte</span><h2 class="h2">Aus Hamburg, für Hamburg.</h2>
-    <p class="lead">[Gründung: Wann und warum ist Bauwerk HH entstanden?]</p>
+    <p class="lead">[Gründung: Wann und warum ist DMC Immobilien entstanden?]</p>
     <p class="lead">[Entwicklung: Vom ersten Auftrag bis heute – welche Gewerke kamen dazu, wie ist das Team gewachsen?]</p>
     <p class="lead">[Haltung: Was ist Ihnen wichtig? z. B. „Wir hinterlassen jede Baustelle so, wie wir selbst eine vorfinden möchten.“]</p>
-    <p class="signature">[Name], Geschäftsführung</p></div>
+    <p class="signature">Danilo Del Favero &amp; Tomasz Gajda, Geschäftsführung</p></div>
   ${ph("Porträt Geschäftsführung", { h: "clamp(300px, 34vw, 480px)" })}
 </div></section>
 <section class="section section--dark" style="padding:64px 0"><div class="container numbers">
@@ -336,7 +336,7 @@ ${ctaBand("Bereit für den ersten Schritt?", `Die Anfrage dauert zwei Minuten. W
   <span class="cta-band__line" aria-hidden="true"></span><h2>Lernen Sie uns kennen.</h2><p>Ob als Kunde oder als neuer Kollege – wir freuen uns auf Sie.</p>
   <div class="cta-band__btns"><a class="btn btn--light" href="/kontakt">Projekt anfragen</a><a class="btn btn--outline-gold" href="/karriere">Karriere bei uns</a></div>
 </div></section>`;
-  page("/ueber-uns", layout({ title: "Über uns", path: "/ueber-uns", active: "ueber", description: "Bauwerk HH – Ihr Sanierungsbetrieb aus Hamburg. Lernen Sie das Team, unsere Arbeitsweise und unsere Qualifikationen kennen.", body }));
+  page("/ueber-uns", layout({ title: "Über uns", path: "/ueber-uns", active: "ueber", description: "DMC Immobilien – Ihr Sanierungsbetrieb aus Hamburg. Lernen Sie das Team, unsere Arbeitsweise und unsere Qualifikationen kennen.", body }));
 }
 
 // ===========================================================================
@@ -351,7 +351,7 @@ ${pageHead({ crumbs: [["Einsatzgebiet"]], eyebrow: "Einsatzgebiet", heading: "Un
   <div class="areas">${areas.map(([t, parts, core]) => `<div class="area${core ? " area--core" : ""}"><div class="area__head"><strong>${t}</strong>${core ? '<span class="area__badge">Kerngebiet</span>' : ""}</div><span class="area__parts">${parts}</span><a class="link-arrow" href="/kontakt">Sanierung in ${t}</a></div>`).join("")}</div>
 </div></section>
 ${ctaBand("Ihr Stadtteil fehlt?", `Fragen Sie trotzdem – oft finden wir eine Lösung. Wir melden uns innerhalb von ${site.response}.`)}`;
-  page("/einsatzgebiet", layout({ title: "Einsatzgebiet", path: "/einsatzgebiet", description: "Bauwerk HH saniert in Hamburg – Altona, Eimsbüttel, Hamburg-Nord, Alstertal, Wandsbek, Mitte, Bergedorf – und im Umland.", body }));
+  page("/einsatzgebiet", layout({ title: "Einsatzgebiet", path: "/einsatzgebiet", description: "DMC Immobilien saniert in Hamburg – Altona, Eimsbüttel, Hamburg-Nord, Alstertal, Wandsbek, Mitte, Bergedorf – und im Umland.", body }));
 }
 
 // ===========================================================================
@@ -433,7 +433,7 @@ articles.forEach((a) => {
   <div class="container career-hero__box"><div class="inner">
     ${breadcrumb([["Karriere"]])}
     <span class="eyebrow">Karriere</span>
-    <h1 class="h1">Arbeiten bei Bauwerk HH.</h1>
+    <h1 class="h1">Arbeiten bei DMC Immobilien.</h1>
     <p class="lead">Gutes Handwerk braucht gute Leute. Bei uns arbeiten Sie in festen Teams an abwechslungsreichen Projekten in ganz Hamburg.</p>
     <div><a class="btn btn--primary btn--block-mobile" href="#stellen">Offene Stellen ansehen</a></div>
   </div></div>
@@ -471,7 +471,7 @@ articles.forEach((a) => {
   </div>
   <div class="contact-person"><span class="contact-person__img" aria-hidden="true"></span><strong>[Name]</strong><span class="muted">[Rolle] – beantwortet Ihre Fragen gern vorab.</span><a class="btn btn--outline" href="${site.phoneHref}">${site.phoneDisplay}</a><a class="btn btn--outline" href="${site.whatsapp}" target="_blank" rel="noopener">WhatsApp schreiben</a></div>
 </div></section>`;
-  page("/karriere", layout({ title: "Karriere", path: "/karriere", description: "Jobs bei Bauwerk HH in Hamburg: Maler, Anlagenmechaniker SHK, Elektroniker und Ausbildung. Feste Teams, gutes Werkzeug, kurze Wege.", body }));
+  page("/karriere", layout({ title: "Karriere", path: "/karriere", description: "Jobs bei DMC Immobilien in Hamburg: Maler, Anlagenmechaniker SHK, Elektroniker und Ausbildung. Feste Teams, gutes Werkzeug, kurze Wege.", body }));
 }
 
 // ===========================================================================
@@ -554,7 +554,7 @@ ${pageHead({ crumbs: [["Kontakt"]], eyebrow: "Kontakt", heading: "Projekt anfrag
   <ol class="mini-steps"><li><b>1</b><strong>Rückruf</strong><span>Innerhalb von ${site.response} – wir klären erste Fragen.</span></li><li><b>2</b><strong>Besichtigung</strong><span>Wir kommen vorbei, beraten und nehmen Maß.</span></li><li><b>3</b><strong>Angebot</strong><span>Schriftlich, mit allen Positionen und Zeitplan.</span></li></ol>
 </div></section>
 <section class="section"><div class="container grid-2">
-  <div class="stack"><h2 class="h2">So finden Sie uns</h2><p class="lead">Bauwerk HH<br>${site.street}<br>${site.zip} ${site.city}</p><a class="link-arrow" href="https://www.google.com/maps/search/?api=1&query=Hamburg" target="_blank" rel="noopener">In Google Maps öffnen</a></div>
+  <div class="stack"><h2 class="h2">So finden Sie uns</h2><p class="lead">${site.legal}<br>${site.street}<br>${site.zip} ${site.city}</p><a class="link-arrow" href="https://www.google.com/maps/search/?api=1&query=Hamburg" target="_blank" rel="noopener">In Google Maps öffnen</a></div>
   ${ph("Statisches Kartenbild Firmensitz", { h: "320px" })}
 </div></section>`;
   page("/kontakt", layout({ title: "Kontakt & Anfrage", path: "/kontakt", active: "kontakt", description: "Projekt kostenlos anfragen: In wenigen Schritten zur Sanierung in Hamburg. Rückmeldung innerhalb von 24 Stunden – telefonisch, per WhatsApp oder E-Mail.", body }));
@@ -564,12 +564,12 @@ ${pageHead({ crumbs: [["Kontakt"]], eyebrow: "Kontakt", heading: "Projekt anfrag
 // Impressum, Datenschutz, 404
 // ===========================================================================
 page("/impressum", layout({
-  title: "Impressum", path: "/impressum", description: "Impressum von Bauwerk HH.", body: `
+  title: "Impressum", path: "/impressum", description: "Impressum von DMC Immobilien.", body: `
 <section class="section"><div class="container container--read legal">
   ${breadcrumb([["Impressum"]])}
   <h1>Impressum</h1>
-  <p><strong>${site.legal}</strong><br>${site.street}, ${site.zip} ${site.city}<br>Telefon: ${site.phoneDisplay} · E-Mail: ${site.email}</p>
-  <p><strong>Vertreten durch:</strong> [Geschäftsführer/-in]<br><strong>Registergericht:</strong> Amtsgericht Hamburg, [HRB-Nr.]<br><strong>USt-IdNr.:</strong> [DE…]</p>
+  <p><strong>${site.legal}</strong><br>${site.street}, ${site.zip} ${site.city}<br>Telefon: +49 (0) 40 22 63 19 620 · E-Mail: <a href="${site.emailHref}">${site.email}</a></p>
+  <p><strong>Vertreten durch:</strong> ${site.managers} (Geschäftsführer)<br><strong>Handelsregister:</strong> ${site.hrb}<br><strong>Registergericht:</strong> [prüfen – aktuelle Website nennt „Bezirksamt Hamburg-Nord“, üblich ist Amtsgericht Hamburg]<br><strong>USt-IdNr.:</strong> ${site.vatId}</p>
   <p><strong>Berufsbezeichnung:</strong> [z. B. Maler- und Lackierermeister], verliehen in Deutschland<br><strong>Zuständige Kammer:</strong> Handwerkskammer Hamburg, [Adresse]<br><strong>Handwerksrolle:</strong> [Nr.] · Berufsrechtliche Regelung: Handwerksordnung</p>
   <p><strong>Verbraucherstreitbeilegung:</strong> [Hinweis gemäß Generator]</p>
   <p class="placeholder-note">[Texte per Generator (z. B. eRecht24) erstellen und hier einfügen.]</p>
@@ -577,7 +577,7 @@ page("/impressum", layout({
 }));
 
 page("/datenschutz", layout({
-  title: "Datenschutzerklärung", path: "/datenschutz", description: "Datenschutzerklärung von Bauwerk HH.", body: `
+  title: "Datenschutzerklärung", path: "/datenschutz", description: "Datenschutzerklärung von DMC Immobilien.", body: `
 <section class="section"><div class="container container--read legal">
   ${breadcrumb([["Datenschutz"]])}
   <h1>Datenschutzerklärung</h1>

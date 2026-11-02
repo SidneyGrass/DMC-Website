@@ -18,8 +18,8 @@ export const SLUG_RE = /^[a-z0-9][a-z0-9-]{0,80}$/;
 
 const env = (k, d = "") => process.env[k] || d;
 export const config = () => ({
-  password: env("ADMIN_PASSWORD"),
-  token: env("GITHUB_TOKEN"),
+  password: env("ADMIN_PASSWORD").trim(),
+  token: env("GITHUB_TOKEN").trim(),
   repo: env("GITHUB_REPO", process.env.VERCEL_GIT_REPO_OWNER ? `${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}` : "SidneyGrass/DMC-Website"),
   branch: env("GITHUB_BRANCH", env("VERCEL_GIT_COMMIT_REF", "main")),
   local: env("CMS_LOCAL_DIR")

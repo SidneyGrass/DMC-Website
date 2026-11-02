@@ -1,0 +1,22 @@
+{
+  "title": "Berner Weg 62",
+  "slug": "berner-weg-62",
+  "published": true,
+  "order": 2,
+  "ort": "22393 Hamburg",
+  "typ": "8 Doppelhaushälften",
+  "status": "In Planung",
+  "fertigstellung": "Q1 2028",
+  "fortschritt": 10,
+  "teaser": "Acht Doppelhaushälften – familienfreundlich, energieeffizient, gut angebunden. [Kurzbeschreibung prüfen]",
+  "beschreibung": "[Beschreibung des Bauvorhabens einsetzen: Lage, Architektur, Bauweise, Energiestandard, Ausstattung.]",
+  "eckdaten": [
+    {
+      "label": "Wohnfläche",
+      "value": "[ca. XXX m²]"
+    }
+  ],
+  "titelbild": "",
+  "galerie": [],
+  "updates": []
+}

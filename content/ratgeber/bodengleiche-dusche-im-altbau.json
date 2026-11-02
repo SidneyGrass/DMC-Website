@@ -1,0 +1,47 @@
+{
+  "title": "Bodengleiche Dusche im Altbau",
+  "slug": "bodengleiche-dusche-im-altbau",
+  "published": true,
+  "order": 4,
+  "date": "2026-11-02",
+  "cat": "Bad",
+  "tags": "Bad · Altbau",
+  "time": "5 Min.",
+  "teaser": "Was technisch möglich ist und welche Lösungen es bei geringer Aufbauhöhe gibt.",
+  "short": "Eine bodengleiche Dusche ist auch im Altbau oft möglich. Entscheidend sind die Aufbauhöhe des Bodens, die Lage des Abflusses und die Deckenkonstruktion.",
+  "service": "badsanierung",
+  "ctaTitle": "Neue Dusche geplant?",
+  "author": "",
+  "authorRole": "",
+  "cover": "",
+  "sections": [
+    {
+      "heading": "Die Herausforderung im Altbau",
+      "text": "Für eine bodengleiche Dusche braucht der Abfluss Gefälle. Im Altbau ist die Aufbauhöhe aber oft gering – besonders bei Holzbalkendecken. Deshalb muss genau geplant werden.",
+      "image": "",
+      "imageCaption": "Eigenes Foto: bodengleiche Dusche"
+    },
+    {
+      "heading": "Mögliche Lösungen",
+      "text": "Flache Duschrinnen und Bodenabläufe mit geringer Einbauhöhe schaffen oft schon genug Spielraum. Wenn das nicht reicht, kann eine minimale Stufe oder ein leicht erhöhtes Bad eine Lösung sein. In manchen Fällen kommt eine Pumpe infrage [prüfen].",
+      "image": "",
+      "imageCaption": ""
+    },
+    {
+      "heading": "Abdichtung ist alles",
+      "text": "Gerade bei bodengleichen Duschen ist eine normgerechte Abdichtung entscheidend. Sie sollte immer vom Fachbetrieb ausgeführt werden.",
+      "image": "",
+      "imageCaption": ""
+    }
+  ],
+  "faq": [
+    {
+      "q": "Geht das auch bei Holzbalkendecken?",
+      "a": "Oft ja – mit flachen Systemen. Wir prüfen das bei der Besichtigung."
+    },
+    {
+      "q": "Wie lange dauert der Umbau?",
+      "a": "Als Teil einer Badsanierung meist [X] Wochen."
+    }
+  ]
+}

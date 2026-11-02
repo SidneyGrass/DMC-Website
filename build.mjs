@@ -5,9 +5,10 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   site, icons, services, serviceBySlug, projects, projectGallery, homeSteps, homeFaq, homeTopics, districts, areas,
-  processSteps, promises, processFaq, team, values, benefits, jobs, articles, neubau, listings, expose, valuation,
+  processSteps, promises, processFaq, team, values, benefits, jobs, articles, neubau, immobilien, bauvorhaben, bewertungen, valuation,
   management, contactTopics
 } from "./src/content.mjs";
+import { md, plain, dateDe, euro } from "./src/cms.mjs";
 import {
   layout, icon, check, ctaBand, pageHead, breadcrumb, ph, beforeAfter, faq, faqSchema, tile, refCard,
   quoteCard, lightbox, hamburgMap, imageFor, afterFor, imgSrc, esc
@@ -26,12 +27,46 @@ const plainImg = (key, alt, cls = "") => `<img${cls ? ` class="${cls}"` : ""} sr
 const single = (name, list, def, { cls = "" } = {}) => `<div class="option-row${cls ? " " + cls : ""}" data-choice="single" role="group"><input type="hidden" name="${name}">${list.map((l) => `<button type="button" class="option" data-value="${esc(l)}" aria-pressed="${l === def}">${l}</button>`).join("")}</div>`;
 const choiceField = (label, name, list, def) => `<div class="field" role="group" aria-label="${esc(label)}"><span class="label">${label}</span>${single(name, list, def)}</div>`;
 
+// Immobilien & Bauvorhaben (Redaktionssystem)
+const REGIONS = ["Elbvororte", "Alstertal", "Hamburg (weitere)", "Umland", "Ausland"];
+const OBJEKTARTEN = ["Haus", "Wohnung", "Grundstück", "Gewerbe"];
+const priceNum = (o) => { const n = Number(String(o.preis || "").replace(/\./g, "").replace(",", ".")); return Number.isFinite(n) && n > 0 ? n : 0; };
+const priceLabel = (o) => { const v = euro(o.preis); return v ? (o.vermarktung === "Miete" ? `${v} / Monat` : v) : (o.preisText || "Preis auf Anfrage"); };
+const listingFacts = (o) => o.kurzinfo || [o.zimmer && `${o.zimmer} Zi.`, (o.wohnflaeche || o.nutzflaeche) && String(o.wohnflaeche || o.nutzflaeche), o.objektart].filter(Boolean).join(" · ");
+const objektartFilter = (t = "") => (/haus/i.test(t) ? "Haus" : t);
+const SOLD = ["Verkauft", "Vermietet"];
+const listingHref = (o) => `/immobilien/${o.slug}`;
+const listingCard = (o, { plain: pl = false } = {}) => `<a class="listing${pl ? " listing--plain" : ""}" href="${listingHref(o)}"${pl ? "" : ` data-kind="${esc(o.vermarktung)}" data-region="${esc(o.region || "")}" data-type="${esc(objektartFilter(o.objektart))}" data-price="${priceNum(o)}"`}>
+      <span class="listing__media">${plainImg(o.titelbild || "villa", o.title)}<span class="listing__badge">${o.status && o.status !== "Verfügbar" ? esc(o.status) : esc(o.vermarktung)}</span></span>
+      <span class="listing__body"><span class="ref-card__tag">${esc(pl ? [o.vermarktung, o.ort].filter(Boolean).join(" · ") : o.ort)}</span><span class="listing__title">${esc(o.title)}</span>${pl ? "" : `<span class="ref-card__meta">${esc(listingFacts(o))}</span>`}<span class="listing__price">${esc(priceLabel(o))}</span></span>
+    </a>`;
+const simpleForm = ({ id, subject, heading, button = "Anfrage senden", done = `Wir melden uns innerhalb von ${site.response} bei Ihnen.` }) => `
+    <h2 class="h3">${heading}</h2>
+    <form class="stack stack--sm" data-simple-form data-success="#${id}-done" novalidate action="${site.formEndpoint}" method="post">
+      <input type="hidden" name="objekt" value="${esc(subject)}">
+      <div class="field"><label for="${id}-name">Name *</label><input class="input" id="${id}-name" name="name" type="text" autocomplete="name" data-required data-error-msg="Bitte geben Sie Ihren Namen an."></div>
+      <div class="field"><label for="${id}-mail">E-Mail *</label><input class="input" id="${id}-mail" name="email" type="email" autocomplete="email" data-required data-error-msg="Bitte geben Sie Ihre E-Mail-Adresse an."></div>
+      <div class="field"><label for="${id}-tel">Telefon</label><input class="input" id="${id}-tel" name="telefon" type="tel" autocomplete="tel"></div>
+      <div class="field"><label for="${id}-msg">Nachricht</label><textarea class="textarea" id="${id}-msg" name="nachricht" rows="3" style="min-height:96px"></textarea></div>
+      <p class="form-note" style="font-size:13px">Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben zu. Mehr in der <a href="/datenschutz">Datenschutzerklärung</a>.</p>
+      <p class="form-error" data-error role="alert"></p>
+      <button class="btn btn--primary" type="submit">${button}</button>
+    </form>
+    <div class="form-success" id="${id}-done" hidden tabindex="-1"><strong>Danke für Ihre Anfrage!</strong><span class="muted">${done}</span></div>`;
+const BV_CLS = { "In Planung": "plan", "Im Bau": "bau", "Fertiggestellt": "fertig" };
+const bvBadge = (st) => (st ? `<span class="status-badge status-badge--${BV_CLS[st] || "plan"}">${esc(st)}</span>` : "");
+const bvProgress = (n) => { const v = Math.max(0, Math.min(100, Number(n) || 0)); return `<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}" aria-label="Baufortschritt"><span style="width:${v}%"></span></div><span class="progress__label">Baufortschritt ${v} %</span>`; };
+function bvCard(b) {
+  return `<a class="ref-card" href="/bauvorhaben/${b.slug}" data-cat="${esc(b.status)}">${ph(b.title + " Neubau", { img: b.titelbild || "neubau" })}<span class="ref-card__body"><span class="ref-card__row"><span class="ref-card__tag">${esc(b.typ)}</span>${bvBadge(b.status)}</span><span class="ref-card__title">${esc(b.title)}</span><span class="ref-card__meta">${esc([b.ort, b.fertigstellung && "Fertigstellung " + b.fertigstellung].filter(Boolean).join(" · "))}</span>${b.status === "Im Bau" ? bvProgress(b.fortschritt) : ""}</span></a>`;
+}
+
 // ===========================================================================
 // Startseite
 // ===========================================================================
 {
   const tiles = services.filter((s) => s.slug !== "komplettsanierung");
-  const refs = ["altbauwohnung-stadtteil", "familienbad-stadtteil", "reihenhaus-stadtteil"].map((k) => projects.find((p) => p.slug === k));
+  const pickRefs = ["altbauwohnung-stadtteil", "familienbad-stadtteil", "reihenhaus-stadtteil"].map((k) => projects.find((p) => p.slug === k)).filter(Boolean);
+  const refs = pickRefs.length === 3 ? pickRefs : projects.filter((p) => p.cat !== "Neubau").slice(0, 3);
   const pillar = ({ img, alt, eyebrow, title, text, topics, btn, more }) => `<article class="pillar">
       ${plainImg(img, alt, "pillar__img")}
       <div class="pillar__body">
@@ -112,7 +147,7 @@ const choiceField = (label, name, list, def) => `<div class="field" role="group"
 
 <section class="section"><div class="container">
   <div class="section-head section-head--row"><h2 class="h2">Was unsere Kunden sagen</h2><a class="link-arrow" href="#" rel="nofollow">Alle Bewertungen bei Google</a></div>
-  <div class="scroller">${["[Stadtteil] · Badsanierung", "[Stadtteil] · Komplettsanierung", "[Stadtteil] · Malerarbeiten"].map(quoteCard).join("")}</div>
+  <div class="scroller">${(bewertungen.length ? bewertungen.slice(0, 6) : ["[Stadtteil] · Badsanierung", "[Stadtteil] · Komplettsanierung", "[Stadtteil] · Malerarbeiten"]).map(quoteCard).join("")}</div>
 </div></section>
 
 <section class="section section--sand"><div class="container grid-2">
@@ -247,7 +282,9 @@ ${ctaBand(`${s.title} in Hamburg?`, "Schicken Sie uns ein paar Fotos und Ihre W�
 // Referenzen
 // ===========================================================================
 {
-  const cats = ["Alle", "Neubau", "Komplettsanierung", "Bad", "Altbau", "Energetisch", "Maler", "Fenster", "Boden"];
+  const known = ["Neubau", "Komplettsanierung", "Bad", "Altbau", "Energetisch", "Maler", "Fenster", "Boden"];
+  const cats = ["Alle", ...known.filter((c) => projects.some((p) => p.cat === c)), ...[...new Set(projects.map((p) => p.cat))].filter((c) => c && !known.includes(c))];
+  const bezirke = [...new Set(projects.map((p) => p.bezirk).filter(Boolean))].sort((a, b) => (a === "Elbvororte" ? -1 : b === "Elbvororte" ? 1 : a === "Alstertal" ? -1 : b === "Alstertal" ? 1 : a.localeCompare(b, "de")));
   const body = `
 ${pageHead({ crumbs: [["Referenzen"]], eyebrow: "Referenzen", heading: "Unsere Projekte in Hamburg", lead: "[XX] abgeschlossene Neubauten und Sanierungen – mit echten Fotos, Stadtteil, Umfang und Dauer." })}
 <section class="section" style="padding-top:48px"><div class="container">
@@ -256,11 +293,11 @@ ${pageHead({ crumbs: [["Referenzen"]], eyebrow: "Referenzen", heading: "Unsere P
       ${cats.map((c, i) => `<button type="button" class="chip" data-value="${c}" aria-pressed="${i === 0}">${c}</button>`).join("")}
     </div>
     <div class="filter-meta"><span id="project-count" aria-live="polite">${projects.length} Projekte</span>
-      <label class="select-wrap" for="ref-stadtteil">Stadtteil <select class="select" id="ref-stadtteil"><option value="">Alle</option><option value="elb">Elbvororte (Ottensen–Blankenese)</option><option value="als">Alstertal</option><option value="a">Altona</option><option value="e">Eimsbüttel</option><option value="w">Wandsbek</option></select></label>
+      <label class="select-wrap" for="ref-stadtteil">Stadtteil <select class="select" id="ref-stadtteil"><option value="">Alle</option>${bezirke.map((b) => `<option value="${esc(b)}">${b === "Elbvororte" ? "Elbvororte (Ottensen–Blankenese)" : esc(b)}</option>`).join("")}</select></label>
     </div>
   </div>
   <div class="project-grid" id="project-grid">
-    ${projects.map((p) => `<a class="ref-card" href="/referenzen/${p.slug}" data-cat="${p.cat}" data-area="${p.area}">${ph(p.title, { img: p.img || "" })}<span class="ref-card__body"><span class="ref-card__tag">${p.cat}</span><span class="ref-card__title">${p.title}</span><span class="ref-card__meta">${p.meta}</span></span></a>`).join("")}
+    ${projects.map((p) => `<a class="ref-card" href="/referenzen/${p.slug}" data-cat="${esc(p.cat)}" data-area="${esc(p.bezirk || "")}">${ph(p.title, { img: p.foto || p.nachher || "" })}<span class="ref-card__body"><span class="ref-card__tag">${esc(p.cat)}</span><span class="ref-card__title">${esc(p.title)}</span><span class="ref-card__meta">${esc(p.meta)}</span></span></a>`).join("")}
   </div>
   <p class="muted" data-filter-empty hidden style="margin-top:24px">Für diese Auswahl gibt es noch keine Projekte. Bitte Filter anpassen.</p>
   <div class="center"><a class="btn btn--outline btn--block-mobile" href="/kontakt">Ihr Projekt anfragen</a></div>
@@ -273,31 +310,33 @@ ${ctaBand("Ihr Projekt könnte das nächste sein.", `Erzählen Sie uns, was Sie 
 projects.forEach((p, i) => {
   const next = projects[(i + 1) % projects.length];
   // Neubau-Projekte haben keine Leistungsseite unter /leistungen, sondern /neubau
-  const svc = p.service ? { ...serviceBySlug[p.service], href: `/leistungen/${p.service}`, ask: `/kontakt?leistung=${encodeURIComponent(serviceBySlug[p.service].form)}` } : { title: "Neubau & Projektierung", href: "/neubau", ask: "/kontakt?anliegen=neubau" };
+  const svc = serviceBySlug[p.service] ? { ...serviceBySlug[p.service], href: `/leistungen/${p.service}`, ask: `/kontakt?leistung=${encodeURIComponent(serviceBySlug[p.service].form)}` } : { title: "Neubau & Projektierung", href: "/neubau", ask: "/kontakt?anliegen=neubau" };
+  const gal = (p.galerie || []).filter(Boolean);
+  const det = (p.detailbilder || []).filter(Boolean);
   const body = `
 <section class="section" style="padding-top:32px;padding-bottom:64px"><div class="container stack" style="gap:28px">
-  ${breadcrumb([["Referenzen", "/referenzen"], [p.title]])}
+  ${breadcrumb([["Referenzen", "/referenzen"], [esc(p.title)]])}
   <div class="proj-head">
-    <div class="stack"><span class="eyebrow">${svc.title}</span><h1 class="h1" style="font-size:calc(var(--h1) - 6px)">${p.h1}</h1></div>
+    <div class="stack"><span class="eyebrow">${svc.title}</span><h1 class="h1" style="font-size:calc(var(--h1) - 6px)">${esc(p.h1 || p.title)}</h1></div>
     <dl class="fact-sheet">
-      <div><dt>Stadtteil</dt><dd>[Stadtteil]</dd></div>
-      <div><dt>Objekt</dt><dd>${p.objekt}</dd></div>
-      <div><dt>Fläche / Umfang</dt><dd>${p.flaeche}</dd></div>
-      <div><dt>Dauer</dt><dd>${p.dauer}</dd></div>
-      <div><dt>Gewerke</dt><dd>${p.gewerke}</dd></div>
+      <div><dt>Stadtteil</dt><dd>${esc(p.stadtteil || "[Stadtteil]")}</dd></div>
+      <div><dt>Objekt</dt><dd>${esc(p.objekt)}</dd></div>
+      <div><dt>Fläche / Umfang</dt><dd>${esc(p.flaeche)}</dd></div>
+      <div><dt>Dauer</dt><dd>${esc(p.dauer)}</dd></div>
+      <div><dt>Gewerke</dt><dd>${esc(p.gewerke)}</dd></div>
     </dl>
   </div>
 </div></section>
-<section><div class="container">${p.img ? ph(p.h1, { img: p.img, h: "clamp(280px, 45vw, 620px)" }) : beforeAfter({ h: "clamp(280px, 45vw, 620px)", caption: "Vorher / Nachher · Regler verschieben", after: afterFor(p) })}</div></section>
+<section><div class="container">${p.foto ? ph(p.h1 || p.title, { img: p.foto, h: "clamp(280px, 45vw, 620px)" }) : beforeAfter({ h: "clamp(280px, 45vw, 620px)", caption: "Vorher / Nachher · Regler verschieben", after: afterFor(p), ...(p.vorher ? { before: p.vorher } : {}) })}</div></section>
 <section class="section"><div class="container grid-2 grid-2--top">
-  <div class="stack"><span class="eyebrow">Ausgangslage</span><h2 class="h2" style="font-size:calc(var(--h2) - 6px)">Die Ausgangslage</h2><p class="lead">[2–3 Sätze: Zustand vorher, z. B. alte Elektrik, Bad aus den 70ern, abgenutzte Dielen. Was wollte der Kunde? z. B. Einzug in 8 Wochen, offene Küche, modernes Bad.]</p></div>
-  <div class="stack"><span class="eyebrow">Umsetzung</span><h2 class="h2" style="font-size:calc(var(--h2) - 6px)">Was wir gemacht haben</h2><p class="lead">[Was gemacht wurde, Besonderheiten und Herausforderungen – z. B. Stuck erhalten, Leitungen unter Putz neu verlegt, Dielen aufgearbeitet statt ersetzt.]</p>
-    <div class="duo">${ph("Baustelle: Detail 1", { tone: "dark", attrs: ' data-lightbox="Baustelle: Detail 1"' })}${ph("Baustelle: Detail 2", { tone: "dark", attrs: ' data-lightbox="Baustelle: Detail 2"' })}</div>
+  <div class="stack"><span class="eyebrow">Ausgangslage</span><h2 class="h2" style="font-size:calc(var(--h2) - 6px)">Die Ausgangslage</h2>${p.ausgangslage ? `<div class="lead cms-text">${md(p.ausgangslage)}</div>` : `<p class="lead">[2–3 Sätze: Zustand vorher, z. B. alte Elektrik, Bad aus den 70ern, abgenutzte Dielen. Was wollte der Kunde? z. B. Einzug in 8 Wochen, offene Küche, modernes Bad.]</p>`}</div>
+  <div class="stack"><span class="eyebrow">Umsetzung</span><h2 class="h2" style="font-size:calc(var(--h2) - 6px)">Was wir gemacht haben</h2>${p.umsetzung ? `<div class="lead cms-text">${md(p.umsetzung)}</div>` : `<p class="lead">[Was gemacht wurde, Besonderheiten und Herausforderungen – z. B. Stuck erhalten, Leitungen unter Putz neu verlegt, Dielen aufgearbeitet statt ersetzt.]</p>`}
+    <div class="duo">${[0, 1].map((k) => ph(`Baustelle: Detail ${k + 1}`, { tone: "dark", img: det[k] || "", attrs: ` data-lightbox="${esc(p.title)} – Detail ${k + 1}"` })).join("")}</div>
   </div>
 </div></section>
 <section class="section section--sand"><div class="container">
   <h2 class="h2" style="margin-bottom:28px">Galerie</h2>
-  <div class="photo-grid">${projectGallery.map((g) => ph(g, { attrs: ` data-lightbox="${g}"` })).join("")}</div>
+  <div class="photo-grid">${gal.length ? gal.map((g, k) => ph(`${p.title} – Foto ${k + 1}`, { img: g, attrs: ` data-lightbox="${esc(p.title)} – Foto ${k + 1}"` })).join("") : projectGallery.map((g) => ph(g, { attrs: ` data-lightbox="${g}"` })).join("")}</div>
 </div></section>
 <section class="section"><div class="container container--narrow">
   <figure class="quote-box" style="margin:0"><span class="stars" aria-label="5 von 5 Sternen">★★★★★</span><blockquote>„[Zitat des Kunden zu diesem Projekt einsetzen]“</blockquote><figcaption class="muted"><strong style="color:var(--text)">[Vorname N.]</strong> · Eigentümer/-in, [Stadtteil]</figcaption></figure>
@@ -305,12 +344,12 @@ projects.forEach((p, i) => {
 <section class="section section--tight-top"><div class="container">
   <div class="next-links">
     <a class="next-link" href="${svc.href}"><span>Passende Leistung</span><span>${svc.title} →</span></a>
-    <a class="next-link" href="/referenzen/${next.slug}"><span>Nächstes Projekt</span><span>${next.title} →</span></a>
+    <a class="next-link" href="/referenzen/${next.slug}"><span>Nächstes Projekt</span><span>${esc(next.title)} →</span></a>
   </div>
   <div class="center"><a class="btn btn--primary btn--block-mobile" href="${svc.ask}">Ähnliches Projekt anfragen</a></div>
 </div></section>
 ${lightbox}`;
-  page(`/referenzen/${p.slug}`, layout({ title: p.title, path: `/referenzen/${p.slug}`, active: "referenzen", description: `Referenzprojekt von DMC Immobilien: ${p.title} – ${p.gewerke}. ${p.img ? "Fotos" : "Vorher-Nachher"}, Umfang und Dauer.`, body }));
+  page(`/referenzen/${p.slug}`, layout({ title: p.title, path: `/referenzen/${p.slug}`, active: "referenzen", description: `Referenzprojekt von DMC Immobilien: ${p.title} – ${p.gewerke}. ${p.foto ? "Fotos" : "Vorher-Nachher"}, Umfang und Dauer.`, body }));
 });
 
 // ===========================================================================
@@ -393,7 +432,8 @@ ${ctaBand("Ihr Stadtteil fehlt?", `Fragen Sie trotzdem – oft finden wir eine L
 // Ratgeber
 // ===========================================================================
 {
-  const cats = ["Alle", "Kosten", "Altbau", "Bad", "Förderung", "Planung"];
+  const known = ["Kosten", "Altbau", "Bad", "Förderung", "Planung"];
+  const cats = ["Alle", ...known.filter((c) => articles.some((a) => a.cat === c)), ...[...new Set(articles.map((a) => a.cat))].filter((c) => c && !known.includes(c))];
   const body = `
 ${pageHead({ crumbs: [["Ratgeber"]], eyebrow: "Ratgeber", heading: "Wissen rund um Ihre Sanierung", lead: "Ehrliche Antworten auf die Fragen, die uns Kunden am häufigsten stellen – zu Kosten, Altbau, Bad, Förderung und Planung." })}
 <section class="section" style="padding-top:48px"><div class="container">
@@ -401,7 +441,7 @@ ${pageHead({ crumbs: [["Ratgeber"]], eyebrow: "Ratgeber", heading: "Wissen rund 
     ${cats.map((c, i) => `<button type="button" class="chip" data-value="${c}" aria-pressed="${i === 0}">${c}</button>`).join("")}
   </div>
   <div class="article-grid" id="article-grid">
-    ${articles.map((a) => `<a class="article-card" href="/ratgeber/${a.slug}" data-cat="${a.cat}">${ph(a.title)}<span class="article-card__meta"><span>${a.cat}</span><span>${a.time}</span></span><span class="article-card__title">${a.title}</span><span class="article-card__teaser">${a.teaser}</span></a>`).join("")}
+    ${articles.map((a) => `<a class="article-card" href="/ratgeber/${a.slug}" data-cat="${esc(a.cat)}">${ph(a.title, { img: a.cover || "" })}<span class="article-card__meta"><span>${esc(a.cat)}</span><span>${esc(a.time)}</span></span><span class="article-card__title">${esc(a.title)}</span><span class="article-card__teaser">${esc(a.teaser)}</span></a>`).join("")}
   </div>
 </div></section>
 ${ctaBand("Ihre Frage ist nicht dabei?", `Fragen Sie uns direkt – wir beraten Sie kostenlos und melden uns innerhalb von ${site.response}.`)}`;
@@ -410,36 +450,35 @@ ${ctaBand("Ihre Frage ist nicht dabei?", `Fragen Sie uns direkt – wir beraten 
 
 // Artikel
 articles.forEach((a) => {
-  const svc = serviceBySlug[a.service];
+  const svc = serviceBySlug[a.service] || services[0];
   const others = articles.filter((x) => x.slug !== a.slug).slice(0, 2);
-  const toc = a.sections.map(([t]) => t.replace(/^\d+\.\s*/, ""));
-  const half = Math.ceil(a.sections.length / 2);
-  const sect = a.sections.map(([t, paras, photo, kind], i) => {
-    const h = /^\d+\./.test(t) ? t : `${i + 1}. ${t}`;
-    let html = `<h2 id="abschnitt-${i + 1}">${h}</h2>`;
-    if (kind === "table") {
-      html += `<div class="table-wrap"><table class="table"><thead><tr><th>Posten</th><th>Kleines Bad (ca. [X] m²)</th><th>Großes Bad (ca. [X] m²)</th></tr></thead><tbody><tr><td>Demontage &amp; Entsorgung</td><td>[€]</td><td>[€]</td></tr><tr><td>Sanitär &amp; Elektro</td><td>[€]</td><td>[€]</td></tr><tr><td>Fliesen &amp; Abdichtung</td><td>[€]</td><td>[€]</td></tr><tr><td>Gesamt (Richtwert)</td><td>[€]</td><td>[€]</td></tr></tbody></table></div><p class="muted" style="font-size:15px">Richtwerte für Hamburg, Stand [MM/JJJJ]. Der genaue Preis hängt von Ihrem Bad ab.</p>`;
-    } else {
-      html += paras.map((p) => `<p>${p}</p>`).join("");
-      if (photo) html += ph(photo, { h: "clamp(220px, 30vw, 340px)" });
-    }
+  const sections = a.sections || [];
+  const faqItems = (a.faq || []).filter((f) => f.q).map((f) => [esc(f.q), esc(f.a)]);
+  const toc = sections.map((x) => x.heading.replace(/^\d+\.\s*/, ""));
+  const half = Math.ceil(sections.length / 2);
+  const sect = sections.map((x, i) => {
+    const h = /^\d+\./.test(x.heading) ? x.heading : `${i + 1}. ${x.heading}`;
+    let html = `<h2 id="abschnitt-${i + 1}">${esc(h)}</h2>${md(x.text)}`;
+    if (x.image) html += `<figure class="cms-figure">${ph(x.imageCaption || a.title, { img: x.image, h: "clamp(220px, 30vw, 340px)" })}${x.imageCaption ? `<figcaption>${esc(x.imageCaption)}</figcaption>` : ""}</figure>`;
+    else if (x.imageCaption) html += ph(x.imageCaption, { h: "clamp(220px, 30vw, 340px)" });
     if (i === half - 1) html += `<div class="inline-cta"><strong>Genaue Kosten für Ihr Projekt?</strong><span>Schicken Sie uns Fotos – wir geben Ihnen eine erste Einschätzung.</span><a class="btn btn--light" href="/kontakt?leistung=${encodeURIComponent(svc.form)}">Jetzt anfragen</a></div>`;
     return html;
   }).join("");
+  const author = a.author ? `<strong>${esc(a.author)}</strong>${a.authorRole ? `, ${esc(a.authorRole)}` : ""}` : `<strong>[Name]</strong>, [Rolle, z. B. Projektleitung]`;
   const body = `
 <article class="article-layout">
   <div class="article-body">
-    ${breadcrumb([["Ratgeber", "/ratgeber"], [a.cat]])}
-    <span class="eyebrow">${a.tags}</span>
-    <h1>${a.title}</h1>
-    <div class="author"><span class="author__img" aria-hidden="true"></span><span><strong>[Name]</strong>, [Rolle, z. B. Projektleitung]<br>Aktualisiert am [TT.MM.JJJJ] · ${a.time} Lesezeit</span></div>
-    <div class="short-answer"><strong>Kurz gesagt</strong><p>${a.short}</p></div>
-    <details class="toc"><summary>Inhalt</summary><ol>${toc.map((t, i) => `<li><a href="#abschnitt-${i + 1}">${t}</a></li>`).join("")}</ol></details>
+    ${breadcrumb([["Ratgeber", "/ratgeber"], [esc(a.cat)]])}
+    <span class="eyebrow">${esc(a.tags || a.cat)}</span>
+    <h1>${esc(a.title)}</h1>
+    <div class="author"><span class="author__img" aria-hidden="true"></span><span>${author}<br>Aktualisiert am ${a.date ? dateDe(a.date) : "[TT.MM.JJJJ]"}${a.time ? ` · ${esc(a.time)} Lesezeit` : ""}</span></div>
+    ${a.short ? `<div class="short-answer"><strong>Kurz gesagt</strong>${md(a.short)}</div>` : ""}
+    ${sections.length > 1 ? `<details class="toc"><summary>Inhalt</summary><ol>${toc.map((t, i) => `<li><a href="#abschnitt-${i + 1}">${esc(t)}</a></li>`).join("")}</ol></details>` : ""}
     ${sect}
-    <div class="article-faq"><h2>Häufige Fragen</h2>${faq(a.faq)}</div>
+    ${faqItems.length ? `<div class="article-faq"><h2>Häufige Fragen</h2>${faq(faqItems)}</div>` : ""}
   </div>
   <aside class="sticky-cta" aria-label="Anfrage">
-    <strong>${a.ctaTitle}</strong>
+    <strong>${esc(a.ctaTitle || "Fragen zu Ihrem Projekt?")}</strong>
     <span>Kostenlose Besichtigung und schriftliches Angebot.</span>
     <a class="btn btn--primary" href="/kontakt?leistung=${encodeURIComponent(svc.form)}">Kostenlos anfragen</a>
     <a class="btn btn--outline" href="${site.phoneHref}">${site.phoneDisplay}</a>
@@ -448,13 +487,16 @@ articles.forEach((a) => {
 <section class="section section--sand"><div class="container">
   <h2 class="h2" style="margin-bottom:28px">Weiterlesen</h2>
   <div class="read-more">
-    ${others.map((o) => `<a class="next-link" href="/ratgeber/${o.slug}"><span>${o.cat}</span><span>${o.title}</span></a>`).join("")}
+    ${others.map((o) => `<a class="next-link" href="/ratgeber/${o.slug}"><span>${esc(o.cat)}</span><span>${esc(o.title)}</span></a>`).join("")}
     <a class="next-link" href="/leistungen/${svc.slug}"><span>Leistung</span><span>${svc.title} in Hamburg →</span></a>
   </div>
 </div></section>`;
+  const article = { "@context": "https://schema.org", "@type": "Article", headline: a.title, author: a.author ? { "@type": "Person", name: a.author } : { "@type": "Organization", name: site.name }, publisher: { "@type": "Organization", name: site.name } };
+  if (a.date) article.dateModified = a.date;
+  if (a.cover) article.image = site.url + a.cover;
   page(`/ratgeber/${a.slug}`, layout({
-    title: a.title, path: `/ratgeber/${a.slug}`, active: "ratgeber", description: a.teaser, body,
-    schema: [faqSchema(a.faq), { "@context": "https://schema.org", "@type": "Article", headline: a.title, author: { "@type": "Organization", name: site.name }, publisher: { "@type": "Organization", name: site.name } }]
+    title: a.title, path: `/ratgeber/${a.slug}`, active: "ratgeber", description: plain(a.teaser), body,
+    schema: [...(faqItems.length ? [faqSchema(faqItems)] : []), article]
   }));
 });
 
@@ -479,8 +521,8 @@ articles.forEach((a) => {
 </div></section>
 <section class="section section--sand" id="stellen"><div class="container container--narrow">
   <h2 class="h2" style="margin-bottom:28px">Offene Stellen</h2>
-  <div class="jobs">${jobs.map((j) => `<details><summary><span>${j.title}</span><span class="job-type">${j.type}</span></summary>
-    <div class="job-body"><div><strong>Ihre Aufgaben</strong><ul>${j.tasks.map((t) => `<li>${t}</li>`).join("")}</ul></div><div><strong>Das bringen Sie mit</strong><ul>${j.profile.map((t) => `<li>${t}</li>`).join("")}</ul></div></div>
+  <div class="jobs">${jobs.length ? "" : `<p class="muted">Aktuell sind alle Stellen besetzt – Initiativbewerbungen sind trotzdem jederzeit willkommen.</p>`}${jobs.map((j) => `<details><summary><span>${esc(j.title)}</span><span class="job-type">${esc(j.type)}</span></summary>
+    <div class="job-body"><div><strong>Ihre Aufgaben</strong><ul>${(j.tasks || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div><div><strong>Das bringen Sie mit</strong><ul>${(j.profile || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div></div>
     <a class="btn btn--primary" href="#bewerben">Jetzt bewerben</a></details>`).join("")}</div>
 </div></section>
 <section class="section"><div class="container grid-2">
@@ -616,6 +658,55 @@ ${pageHead({ crumbs: [["Kontakt"]], eyebrow: "Kontakt", heading: "Wie können wi
 }
 
 // ===========================================================================
+// Bauvorhaben (gepflegt im Redaktionssystem /admin)
+// ===========================================================================
+{
+  const cats = ["Alle", ...["In Planung", "Im Bau", "Fertiggestellt"].filter((c) => bauvorhaben.some((b) => b.status === c))];
+  const body = `
+${pageHead({ crumbs: [["Bauen &amp; Sanieren", "/leistungen"], ["Bauvorhaben"]], eyebrow: "Bauvorhaben", heading: "Unsere aktuellen Bauvorhaben", lead: "Neubau in Massivbauweise mit eigenen Handwerkern: Hier sehen Sie, woran wir gerade bauen – mit Baufortschritt, Eckdaten und Fotos von der Baustelle." })}
+<section class="section" style="padding-top:48px"><div class="container">
+  ${cats.length > 2 ? `<div class="chip-row chip-row--scroll" role="group" aria-label="Status filtern" style="margin-bottom:32px" data-filter-group data-filter-target="#bv-grid">${cats.map((c, i) => `<button type="button" class="chip" data-value="${c}" aria-pressed="${i === 0}">${c}</button>`).join("")}</div>` : ""}
+  <div class="project-grid" id="bv-grid">${bauvorhaben.map(bvCard).join("")}</div>
+  ${bauvorhaben.length ? "" : `<p class="lead">Neue Bauvorhaben stellen wir hier in Kürze vor.</p>`}
+</div></section>
+${ctaBand("Interesse an einem Neubau?", `Sprechen Sie uns an – wir informieren Sie über Grundrisse, Preise und den Zeitplan.`, "/kontakt?anliegen=neubau")}`;
+  page("/bauvorhaben", layout({ title: "Aktuelle Bauvorhaben", path: "/bauvorhaben", active: "bauen", description: "Aktuelle Bauvorhaben von DMC Immobilien in Hamburg: Neubau von Doppelhaushälften und Wohnhäusern – mit Baufortschritt, Eckdaten und Fotos.", body }));
+}
+bauvorhaben.forEach((b) => {
+  const offers = immobilien.filter((o) => o.bauvorhaben === b.slug);
+  const updates = (b.updates || []).filter((u) => u.titel || u.text).sort((x, y) => String(y.datum).localeCompare(String(x.datum)));
+  const facts = [["Ort", b.ort], ["Bauvorhaben", b.typ], ["Status", b.status], ["Fertigstellung", b.fertigstellung], ...(b.eckdaten || []).filter((e) => e.label).map((e) => [e.label, e.value])];
+  const gal = (b.galerie || []).filter(Boolean);
+  const body = `
+<section class="section" style="padding-top:32px;padding-bottom:56px"><div class="container stack" style="gap:28px">
+  ${breadcrumb([["Bauvorhaben", "/bauvorhaben"], [esc(b.title)]])}
+  <div class="proj-head">
+    <div class="stack"><span class="eyebrow">Bauvorhaben · ${esc(b.typ)}</span><h1 class="h1" style="font-size:calc(var(--h1) - 6px)">${esc(b.title)}</h1>${b.teaser ? `<p class="lead">${esc(b.teaser)}</p>` : ""}${b.status !== "Fertiggestellt" ? `<div class="bv-progress">${bvProgress(b.fortschritt)}</div>` : ""}</div>
+    <dl class="fact-sheet">${facts.filter(([, v]) => v).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+  </div>
+</div></section>
+<section><div class="container">${ph(b.title + " Neubau", { img: b.titelbild || "neubau", h: "clamp(260px, 42vw, 580px)" })}</div></section>
+<section class="section"><div class="container expose-layout">
+  <div class="expose-main">
+    <div class="stack stack--sm"><span class="eyebrow">Das Projekt</span><h2 class="h2" style="font-size:calc(var(--h2) - 6px)">Über das Bauvorhaben</h2><div class="cms-text lead">${md(b.beschreibung)}</div></div>
+  </div>
+  <aside class="expose-aside" aria-label="Informationen anfordern">${simpleForm({ id: "bv", subject: `Bauvorhaben ${b.title}`, heading: "Infos zu diesem Bauvorhaben anfordern", button: "Infos anfordern" })}</aside>
+</div></section>
+${updates.length ? `<section class="section section--sand"><div class="container container--narrow">
+  <span class="eyebrow" style="margin-bottom:12px">Bautagebuch</span><h2 class="h2" style="margin-bottom:32px">Baufortschritt</h2>
+  <ol class="bv-updates">${updates.map((u) => `<li><time datetime="${esc(u.datum)}">${dateDe(u.datum)}</time><div class="bv-updates__body"><strong>${esc(u.titel)}</strong>${md(u.text)}${u.bild ? ph(u.titel || b.title, { img: u.bild, h: "clamp(200px, 28vw, 340px)", attrs: ` data-lightbox="${esc(u.titel || b.title)}"` }) : ""}</div></li>`).join("")}</ol>
+</div></section>` : ""}
+${gal.length ? `<section class="section"><div class="container"><h2 class="h2" style="margin-bottom:28px">Galerie</h2><div class="photo-grid">${gal.map((g, k) => ph(`${b.title} – Foto ${k + 1}`, { img: g, attrs: ` data-lightbox="${esc(b.title)} – Foto ${k + 1}"` })).join("")}</div></div></section>` : ""}
+${offers.length ? `<section class="section section--sand"><div class="container"><h2 class="h2" style="margin-bottom:28px">Verfügbare Einheiten</h2><div class="listing-grid">${offers.map((x) => listingCard(x, { plain: true })).join("")}</div></div></section>` : ""}
+<section class="section section--tight-top" style="padding-top:48px"><div class="container"><div class="next-links">
+  <a class="next-link" href="/bauvorhaben"><span>Übersicht</span><span>Alle Bauvorhaben →</span></a>
+  <a class="next-link" href="/neubau"><span>Leistung</span><span>Neubau &amp; Projektierung →</span></a>
+</div></div></section>
+${lightbox}`;
+  page(`/bauvorhaben/${b.slug}`, layout({ title: `Bauvorhaben ${b.title}`, path: `/bauvorhaben/${b.slug}`, active: "bauen", description: plain(b.teaser) || `${b.typ} in ${b.ort} – Bauvorhaben von DMC Immobilien.`, body }));
+});
+
+// ===========================================================================
 // Neubau & Projektierung
 // ===========================================================================
 {
@@ -640,11 +731,15 @@ ${pageHead({ crumbs: [["Kontakt"]], eyebrow: "Kontakt", heading: "Wie können wi
   <div class="section-head"><span class="eyebrow" style="margin-bottom:12px">Ablauf</span><h2 class="h2">Vom Grundstück bis zur Schlüsselübergabe.</h2></div>
   ${darkSteps(neubau.steps)}
 </div></section>
-<section class="section"><div class="container">
+${bauvorhaben.length ? `<section class="section"><div class="container">
+  <div class="section-head section-head--row"><div><span class="eyebrow" style="margin-bottom:12px">Gerade im Bau</span><h2 class="h2">Aktuelle Bauvorhaben</h2></div><a class="link-arrow" href="/bauvorhaben">Alle Bauvorhaben</a></div>
+  <div class="project-grid">${bauvorhaben.slice(0, 3).map(bvCard).join("")}</div>
+</div></section>` : ""}
+<section class="section${bauvorhaben.length ? " section--sand" : ""}"><div class="container">
   <div class="section-head section-head--row"><h2 class="h2">Von uns gebaut</h2><a class="link-arrow" href="/referenzen">Alle Referenzen</a></div>
   <div class="project-grid">${neubau.refs.map(([t, place, meta, img, href]) => `<a class="ref-card" href="${href}">${ph(t, { img })}<span class="ref-card__body"><span class="ref-card__tag">Neubau · ${place}</span><span class="ref-card__title">${t}</span><span class="ref-card__meta">${meta}</span></span></a>`).join("")}</div>
 </div></section>
-<section class="section section--sand"><div class="container container--narrow">
+<section class="section${bauvorhaben.length ? "" : " section--sand"}"><div class="container container--narrow">
   <h2 class="h2" style="margin-bottom:24px">Häufige Fragen zum Neubau</h2>
   ${faq(neubau.faq)}
 </div></section>
@@ -657,30 +752,27 @@ ${ctaBand("Sie planen einen Neubau?", `Erzählen Sie uns von Ihrem Vorhaben – 
 }
 
 // ===========================================================================
-// Immobilien – aktuelle Angebote (Filter Kaufen/Mieten in main.js)
+// Immobilien – aktuelle Angebote (gepflegt im Redaktionssystem /admin, Filter in main.js)
 // ===========================================================================
-const listingHref = (l) => (l.slug ? `/immobilien/${l.slug}` : `/kontakt?anliegen=suchen`);
 {
+  const regions = [...REGIONS, ...new Set(immobilien.map((o) => o.region).filter((r) => r && !REGIONS.includes(r)))];
   const body = `
 ${pageHead({ crumbs: [["Immobilien"]], eyebrow: "Immobilien", heading: "Aktuelle Angebote", lead: "Häuser, Wohnungen und Gewerbeflächen zur Miete und zum Kauf – in Hamburg, im Umland und ausgewählt im Ausland." })}
 <section class="section" style="padding-top:48px"><div class="container">
   <form class="immo-filter" data-immo-filter data-target="#listing-grid" data-count="#listing-count" role="search" aria-label="Angebote filtern">
     <div class="seg" role="group" aria-label="Vermarktungsart">${["Alle", "Kaufen", "Mieten"].map((l, i) => `<button type="button" class="seg__btn" data-kind="${l === "Kaufen" ? "Kauf" : l === "Mieten" ? "Miete" : ""}" data-param-value="${l.toLowerCase()}" aria-pressed="${i === 0}">${l}</button>`).join("")}</div>
     <div class="immo-filter__fields">
-      <div class="field"><label for="i-ort">Ort / Region</label><select class="select select--full" id="i-ort" name="region"><option value="">Alle Orte</option><option>Elbvororte</option><option>Alstertal</option><option>Hamburg (weitere)</option><option>Umland</option><option>Ausland</option></select></div>
-      <div class="field"><label for="i-art">Objektart</label><select class="select select--full" id="i-art" name="objektart"><option value="">Alle</option><option>Haus</option><option>Wohnung</option><option>Grundstück</option><option>Gewerbe</option></select></div>
+      <div class="field"><label for="i-ort">Ort / Region</label><select class="select select--full" id="i-ort" name="region"><option value="">Alle Orte</option>${regions.map((r) => `<option>${esc(r)}</option>`).join("")}</select></div>
+      <div class="field"><label for="i-art">Objektart</label><select class="select select--full" id="i-art" name="objektart"><option value="">Alle</option>${OBJEKTARTEN.map((t) => `<option>${t}</option>`).join("")}</select></div>
       <div class="field"><label for="i-preis">Preis bis</label><input class="input" id="i-preis" name="preis" type="text" inputmode="numeric" placeholder="z. B. 3.000 €"></div>
       <button class="btn btn--primary" type="submit">Suchen</button>
     </div>
   </form>
-  <p class="listing-count" id="listing-count" aria-live="polite">${listings.length} Angebote</p>
+  <p class="listing-count" id="listing-count" aria-live="polite">${immobilien.length} ${immobilien.length === 1 ? "Angebot" : "Angebote"}</p>
   <div class="listing-grid" id="listing-grid">
-    ${listings.map((l) => `<a class="listing" href="${listingHref(l)}" data-kind="${l.kind}" data-region="${esc(l.region)}" data-type="${esc(l.type)}" data-price="${l.priceNum}">
-      <span class="listing__media">${plainImg(l.img, l.title)}<span class="listing__badge">${l.kind}</span></span>
-      <span class="listing__body"><span class="ref-card__tag">${l.place}</span><span class="listing__title">${l.title}</span><span class="ref-card__meta">${l.facts}</span><span class="listing__price">${l.price}</span></span>
-    </a>`).join("")}
+    ${immobilien.map((o) => listingCard(o)).join("")}
   </div>
-  <p class="muted" data-filter-empty hidden style="margin-top:24px">Für diese Auswahl gibt es gerade keine Angebote. Legen Sie gern einen <a href="/kontakt?anliegen=suchen">Suchauftrag</a> an.</p>
+  <p class="muted" data-filter-empty ${immobilien.length ? "hidden " : ""}style="margin-top:24px">${immobilien.length ? "Für diese Auswahl gibt es gerade keine Angebote." : "Aktuell sind alle Objekte vergeben."} Legen Sie gern einen <a href="/kontakt?anliegen=suchen">Suchauftrag</a> an.</p>
 </div></section>
 <section class="section section--sand"><div class="container duo-boxes">
   <div class="duo-box">
@@ -698,54 +790,59 @@ ${pageHead({ crumbs: [["Immobilien"]], eyebrow: "Immobilien", heading: "Aktuelle
 }
 
 // ===========================================================================
-// Exposé (Beispiel: Exklusiv wohnen im schönen Sasel)
+// Exposé-Seiten (eine pro Angebot)
 // ===========================================================================
-{
-  const l = listings.find((x) => x.slug === expose.slug);
-  const similar = listings.filter((x) => x !== l && x.kind === "Miete").slice(0, 2).concat(listings.filter((x) => x.kind === "Kauf").slice(0, 1));
+immobilien.forEach((o) => {
+  const miete = o.vermarktung === "Miete";
+  const e = o.energie || {};
+  const bv = bauvorhaben.find((b) => b.slug === o.bauvorhaben);
+  const imgs = [o.titelbild, ...(o.galerie || [])].filter(Boolean);
+  const main = imgs[0] || "villa";
+  const thumbs = imgs.slice(1, 5);
+  const similar = [...immobilien.filter((x) => x !== o && x.vermarktung === o.vermarktung), ...immobilien.filter((x) => x !== o && x.vermarktung !== o.vermarktung)].slice(0, 3);
+  const rows = (list) => list.filter(([, v]) => v !== "" && v != null).map(([t, v]) => `<div><dt>${esc(t)}</dt><dd>${esc(v)}</dd></div>`).join("");
+  const facts = [[miete ? "Kaltmiete" : "Kaufpreis", euro(o.preis) || o.preisText || "auf Anfrage"], ["Wohnfläche", o.wohnflaeche], ["Nutzfläche", o.nutzflaeche], ["Zimmer", o.zimmer], ["Grundstück", o.grundstueck], ["Baujahr", o.baujahr], ["Verfügbar ab", o.verfuegbarAb], [miete ? "Nebenkosten" : "Hausgeld", euro(o.nebenkosten)], ["Kaution", miete ? o.kaution : ""], [miete ? "Provision" : "Käuferprovision", o.provision], ["Status", o.status !== "Verfügbar" ? o.status : ""]];
+  const energy = [["Ausweistyp", e.ausweis], ["Energiekennwert", e.kennwert && `${e.kennwert} kWh/(m²·a)`], ["Energieträger", e.traeger], ["Baujahr", e.baujahrHeizung], ["Effizienzklasse", e.klasse]];
+  const agentName = o.kontaktName || site.contactName;
+  const agentTel = o.kontaktTelefon || site.phoneDisplay;
   const body = `
 <section class="section" style="padding:28px 0 0"><div class="container stack" style="gap:16px">
-  ${breadcrumb([["Immobilien", "/immobilien"], ["Hamburg-Sasel"]])}
-  <div class="expose-gallery">
-    <div class="expose-gallery__main" data-lightbox="Außenansicht des Hauses in Hamburg-Sasel">${plainImg(l.img, "Außenansicht des Hauses in Hamburg-Sasel")}</div>
-    <div class="expose-gallery__thumbs">
-      ${expose.thumbs.map(([t, img], i) => `<div class="expose-gallery__thumb" data-lightbox="${t}">${plainImg(img, t)}${i === expose.thumbs.length - 1 ? `<span class="expose-gallery__more">Alle Fotos · Grundriss</span>` : ""}</div>`).join("")}
-    </div>
+  ${breadcrumb([["Immobilien", "/immobilien"], [esc(o.ort || o.title)]])}
+  <div class="expose-gallery${thumbs.length ? "" : " expose-gallery--single"}">
+    <div class="expose-gallery__main" data-lightbox="${esc(o.title)}">${plainImg(main, o.title)}</div>
+    ${thumbs.length ? `<div class="expose-gallery__thumbs expose-gallery__thumbs--${thumbs.length}">
+      ${thumbs.map((g, i) => `<div class="expose-gallery__thumb" data-lightbox="${esc(o.title)} – Foto ${i + 2}">${plainImg(g, `${o.title} – Foto ${i + 2}`)}${i === thumbs.length - 1 && imgs.length > 5 ? `<span class="expose-gallery__more">+ ${imgs.length - 5} weitere Fotos</span>` : ""}</div>`).join("")}
+    </div>` : ""}
   </div>
 </div></section>
 <section class="section" style="padding-top:48px"><div class="container expose-layout">
   <div class="expose-main">
-    <div class="stack stack--sm"><span class="eyebrow">${l.kind} · ${l.place}</span><h1 class="h1 expose-main__h1">${l.title}</h1></div>
-    <dl class="fact-grid">${expose.facts.map(([t, v]) => `<div><dt>${t}</dt><dd>${v}</dd></div>`).join("")}</dl>
-    <div class="stack stack--sm"><h2 class="h3">Objektbeschreibung</h2><p class="muted">${expose.description}</p></div>
-    <div class="stack stack--sm"><h2 class="h3">Ausstattung</h2><ul class="feature-list">${expose.features.map((f) => `<li>${f}</li>`).join("")}</ul></div>
-    <div class="stack stack--sm"><h2 class="h3">Lage</h2><p class="muted">${expose.location}</p></div>
-    <div class="stack stack--sm"><h2 class="h3">Energieausweis</h2><dl class="energy-list">${expose.energy.map(([t, v]) => `<div><dt>${t}</dt><dd>${v}</dd></div>`).join("")}</dl></div>
+    <div class="stack stack--sm"><span class="eyebrow">${esc([o.vermarktung, o.ort].filter(Boolean).join(" · "))}</span><h1 class="h1 expose-main__h1">${esc(o.title)}</h1></div>
+    <dl class="fact-grid">${rows(facts)}${"<div aria-hidden=\"true\"></div>".repeat((4 - (facts.filter(([, v]) => v !== "" && v != null).length % 4)) % 4)}</dl>
+    ${o.beschreibung ? `<div class="stack stack--sm"><h2 class="h3">Objektbeschreibung</h2><div class="muted cms-text">${md(o.beschreibung)}</div></div>` : ""}
+    ${(o.ausstattung || []).filter(Boolean).length ? `<div class="stack stack--sm"><h2 class="h3">Ausstattung</h2><ul class="feature-list">${o.ausstattung.filter(Boolean).map((f) => `<li>${esc(f)}</li>`).join("")}</ul></div>` : ""}
+    ${o.lage ? `<div class="stack stack--sm"><h2 class="h3">Lage</h2><div class="muted cms-text">${md(o.lage)}</div></div>` : ""}
+    ${energy.some(([, v]) => v) ? `<div class="stack stack--sm"><h2 class="h3">Energieausweis</h2><dl class="energy-list">${rows(energy)}</dl></div>` : ""}
+    ${imgs.length > 5 ? `<div class="stack stack--sm"><h2 class="h3">Alle Fotos</h2><div class="photo-grid">${imgs.map((g, k) => ph(`${o.title} – Foto ${k + 1}`, { img: g, attrs: ` data-lightbox="${esc(o.title)} – Foto ${k + 1}"` })).join("")}</div></div>` : ""}
+    ${bv ? `<a class="next-link" href="/bauvorhaben/${bv.slug}"><span>Teil des Bauvorhabens</span><span>${esc(bv.title)} →</span></a>` : ""}
   </div>
   <aside class="expose-aside" aria-label="Besichtigung anfragen">
-    <div class="agent">${plainImg("avatar-2", "Ihr Ansprechpartner")}<div><span class="muted" style="font-size:13px">Ihr Ansprechpartner</span><strong>${site.contactName}</strong><a href="${site.phoneHref}">${site.phoneDisplay}</a></div></div>
-    <h2 class="h3">Besichtigung anfragen</h2>
-    <form class="stack stack--sm" data-simple-form data-success="#expose-done" novalidate action="${site.formEndpoint}" method="post">
-      <input type="hidden" name="objekt" value="${esc(l.title)} (${esc(l.place)})">
-      <div class="field"><label for="e-name">Name *</label><input class="input" id="e-name" name="name" type="text" autocomplete="name" data-required data-error-msg="Bitte geben Sie Ihren Namen an."></div>
-      <div class="field"><label for="e-mail">E-Mail *</label><input class="input" id="e-mail" name="email" type="email" autocomplete="email" data-required data-error-msg="Bitte geben Sie Ihre E-Mail-Adresse an."></div>
-      <div class="field"><label for="e-tel">Telefon</label><input class="input" id="e-tel" name="telefon" type="tel" autocomplete="tel"></div>
-      <div class="field"><label for="e-msg">Nachricht</label><textarea class="textarea" id="e-msg" name="nachricht" rows="3" style="min-height:96px"></textarea></div>
-      <p class="form-note" style="font-size:13px">Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben zu. Mehr in der <a href="/datenschutz">Datenschutzerklärung</a>.</p>
-      <p class="form-error" data-error role="alert"></p>
-      <button class="btn btn--primary" type="submit">Anfrage senden</button>
-    </form>
-    <div class="form-success" id="expose-done" hidden tabindex="-1"><strong>Danke für Ihre Anfrage!</strong><span class="muted">Wir melden uns innerhalb von ${site.response} mit Terminvorschlägen für die Besichtigung.</span></div>
-    <a class="link-arrow" href="#" rel="nofollow" style="justify-content:center">Exposé als PDF herunterladen [PDF einbinden]</a>
+    <div class="agent">${plainImg("avatar-2", "Ihr Ansprechpartner")}<div><span class="muted" style="font-size:13px">Ihr Ansprechpartner</span><strong>${esc(agentName)}</strong><a href="tel:${esc(agentTel.replace(/[^\d+]/g, "").replace(/^0/, "+49"))}">${esc(agentTel)}</a>${o.kontaktEmail ? `<a href="mailto:${esc(o.kontaktEmail)}">${esc(o.kontaktEmail)}</a>` : ""}</div></div>
+    ${SOLD.includes(o.status) ? `<p class="muted">Dieses Objekt ist bereits ${o.status.toLowerCase()}. Legen Sie gern einen <a href="/kontakt?anliegen=suchen">Suchauftrag</a> an.</p>` : simpleForm({ id: "e", subject: `${o.title} (${o.ort})`, heading: "Besichtigung anfragen", done: `Wir melden uns innerhalb von ${site.response} mit Terminvorschlägen für die Besichtigung.` })}
+    ${o.expose ? `<a class="link-arrow" href="${esc(o.expose)}" target="_blank" rel="noopener" style="justify-content:center">Exposé als PDF herunterladen</a>` : ""}
   </aside>
 </div></section>
-<section class="section section--sand"><div class="container">
+${similar.length ? `<section class="section section--sand"><div class="container">
   <h2 class="h2" style="margin-bottom:24px">Ähnliche Angebote</h2>
-  <div class="listing-grid">${similar.map((x) => `<a class="listing listing--plain" href="${listingHref(x)}"><span class="listing__media">${plainImg(x.img, x.title)}</span><span class="listing__body"><span class="ref-card__tag">${x.kind} · ${x.place.replace(/ \(.*\)$/, "")}</span><span class="listing__title">${x.title}</span><span class="listing__price">${x.price}</span></span></a>`).join("")}</div>
-</div></section>
+  <div class="listing-grid">${similar.map((x) => listingCard(x, { plain: true })).join("")}</div>
+</div></section>` : ""}
 ${lightbox}`;
-  page(`/immobilien/${expose.slug}`, layout({ title: `${l.title} – ${l.kind}`, path: `/immobilien/${expose.slug}`, active: "immobilien", description: `${l.title}: ${l.kind} in ${l.place}, ${l.price}. Exposé, Ausstattung, Lage und Besichtigungsanfrage bei DMC Immobilien.`, body }));
-}
+  page(`/immobilien/${o.slug}`, layout({
+    title: `${o.title} – ${o.vermarktung}`, path: `/immobilien/${o.slug}`, active: "immobilien",
+    description: plain(o.teaser) || `${o.title}: ${o.vermarktung} in ${o.ort}, ${priceLabel(o)}. Exposé, Ausstattung, Lage und Besichtigungsanfrage bei DMC Immobilien.`, body,
+    schema: [{ "@context": "https://schema.org", "@type": "RealEstateListing", name: o.title, url: `${site.url}/immobilien/${o.slug}`, ...(o.titelbild ? { image: site.url + imgSrc(o.titelbild) } : {}) }]
+  }));
+});
 
 // ===========================================================================
 // Immobilie verkaufen / vermieten – Bewertung (3-stufiges Formular in main.js)
@@ -933,6 +1030,6 @@ writeFileSync(join(out, "404.html"), notFound);
 // sitemap.xml & robots.txt
 const urls = pages.map(([p]) => `  <url><loc>${site.url}${p === "/" ? "/" : p}</loc></url>`).join("\n");
 writeFileSync(join(out, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
-writeFileSync(join(out, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${site.url}/sitemap.xml\n`);
+writeFileSync(join(out, "robots.txt"), `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\nSitemap: ${site.url}/sitemap.xml\n`);
 
 console.log(`✓ ${pages.length + 1} Seiten erzeugt in dist/`);

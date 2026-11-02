@@ -874,3 +874,32 @@ p { margin: 0; }
 .section--dark .mini-steps strong { color: #fff; }
 .section--dark .mini-steps span { color: #D0D4D5; }
 @media (max-width: 639px) { .trust__grid--stack { grid-template-columns: minmax(0, 1fr); gap: 0; } .trust__grid--stack .trust__item { padding: 10px 0; } }
+
+/* ==========================================================================
+   Inhalte aus dem Redaktionssystem: Textformatierung, Bauvorhaben
+   ========================================================================== */
+.cms-text { display: flex; flex-direction: column; gap: 14px; }
+.cms-text p, .cms-text ul { margin: 0; }
+.cms-text ul { padding-left: 1.2em; }
+.cms-figure { margin: 8px 0 0; }
+.cms-figure figcaption { font-size: 14px; color: var(--text-2); margin-top: 8px; }
+.expose-gallery--single { grid-template-columns: minmax(0, 1fr); }
+.expose-gallery__thumbs--1 { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+.expose-gallery__thumbs--2 { grid-template-columns: minmax(0, 1fr); }
+.expose-gallery__thumbs--3 .expose-gallery__thumb:first-child { grid-column: 1 / -1; }
+@media (max-width: 1023px) { .expose-gallery__thumbs--1, .expose-gallery__thumbs--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ref-card__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.status-badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 99px; font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .02em; background: var(--nebel); color: var(--tiefsee); white-space: nowrap; }
+.status-badge--bau { background: #F1E7D3; color: #6B5226; }
+.status-badge--fertig { background: #E3ECE5; color: #2E5A3A; }
+.progress { height: 8px; border-radius: 99px; background: var(--nebel); overflow: hidden; margin-top: 8px; }
+.progress span { display: block; height: 100%; background: var(--messing-hell); border-radius: inherit; }
+.progress__label { font-size: 13px; color: var(--text-2); }
+.bv-progress { max-width: 420px; }
+.bv-updates { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-left: 2px solid var(--linie); }
+.bv-updates li { position: relative; padding: 0 0 36px 28px; display: flex; flex-direction: column; gap: 8px; }
+.bv-updates li::before { content: ""; position: absolute; left: -7px; top: 4px; width: 12px; height: 12px; border-radius: 99px; background: var(--messing-hell); border: 2px solid #fff; }
+.bv-updates time { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--messing); }
+.bv-updates__body { display: flex; flex-direction: column; gap: 10px; }
+.bv-updates__body > strong { font-family: var(--serif); font-size: 24px; color: var(--tiefsee); line-height: 1.15; }
+.bv-updates__body p { margin: 0; color: var(--text-2); }

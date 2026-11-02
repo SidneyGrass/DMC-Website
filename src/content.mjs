@@ -1,6 +1,10 @@
 // DMC Immobilien – zentrale Inhalte
 // Alle Angaben in [eckigen Klammern] und mit „[prüfen]“ vor dem Livegang mit echten Werten füllen.
 
+// Firmendaten können im Redaktionssystem unter „Firmendaten“ überschrieben werden
+// (content/einstellungen.json) – diese Werte haben Vorrang.
+import { collection, settings } from "./cms.mjs";
+
 export const site = {
   name: "DMC Immobilien",
   legal: "DMC Immobilien GmbH",
@@ -26,6 +30,9 @@ export const site = {
   // Formular-Endpunkt (z. B. Formspree/Getform). "#" = Demo ohne Versand.
   formEndpoint: "#"
 };
+Object.assign(site, Object.fromEntries(Object.entries(settings).filter(([, v]) => v !== "" && v != null)));
+site.phoneHref = "tel:" + site.phoneDisplay.replace(/[^\d+]/g, "").replace(/^0/, "+49");
+site.emailHref = "mailto:" + site.email;
 
 export const icons = {
   check: "M5 12l5 5 9-10",
@@ -455,18 +462,8 @@ export const serviceBySlug = Object.fromEntries(services.map((s) => [s.slug, s])
 // ---------------------------------------------------------------------------
 // Referenzen / Projekte
 // ---------------------------------------------------------------------------
-export const projects = [
-  { slug: "doppelhaus-stadtteil", cat: "Neubau", area: "als", img: "neubau-luft", title: "Doppelhaus [Stadtteil]", meta: "[Wohnfläche] · Massivbau · [Bauzeit]", h1: "Doppelhaus in [Stadtteil]: massiv gebaut, pünktlich übergeben.", objekt: "Doppelhaus, Neubau in Massivbauweise", flaeche: "[Wohnfläche] m²", dauer: "[Bauzeit]", gewerke: "Rohbau, Haustechnik, Innenausbau mit eigenen Handwerkern", service: null },
-  { slug: "altbauwohnung-stadtteil", cat: "Komplettsanierung", area: "a", title: "Altbauwohnung [Stadtteil]", meta: "[m²] · [Dauer] · alle Gewerke", h1: "Altbauwohnung in [Stadtteil]: aus 1920 wird heute.", objekt: "Altbauwohnung, Bj. [1920]", flaeche: "[85] m²", dauer: "[7] Wochen", gewerke: "Elektro, Sanitär, Trockenbau, Boden, Maler", service: "komplettsanierung" },
-  { slug: "familienbad-stadtteil", cat: "Bad", area: "e", title: "Familienbad [Stadtteil]", meta: "[m²] · [Dauer] · Sanitär, Fliesen", h1: "Familienbad in [Stadtteil]: Platz für alle.", objekt: "Wohnung, Bj. [1965]", flaeche: "[9] m²", dauer: "[3] Wochen", gewerke: "Sanitär, Elektro, Fliesen, Trockenbau", service: "badsanierung" },
-  { slug: "reihenhaus-stadtteil", cat: "Energetisch", area: "w", title: "Reihenhaus [Stadtteil]", meta: "[Baujahr] · [Dauer] · Dämmung, Fenster", h1: "Reihenhaus in [Stadtteil]: warm durch den Winter.", objekt: "Reihenhaus, Bj. [1972]", flaeche: "[120] m²", dauer: "[6] Wochen", gewerke: "Dämmung, Fenster, Heizung", service: "energetische-sanierung" },
-  { slug: "jugendstilwohnung-stadtteil", cat: "Altbau", area: "e", title: "Jugendstilwohnung [Stadtteil]", meta: "[m²] · [Dauer] · Boden, Maler, Elektro", h1: "Jugendstilwohnung in [Stadtteil]: Stuck bleibt, Technik neu.", objekt: "Altbauwohnung, Bj. [1908]", flaeche: "[110] m²", dauer: "[8] Wochen", gewerke: "Elektro, Boden, Maler", service: "altbausanierung" },
-  { slug: "treppenhaus-stadtteil", cat: "Maler", area: "a", title: "Treppenhaus [Stadtteil]", meta: "[Etagen] · [Dauer] · Malerarbeiten", h1: "Treppenhaus in [Stadtteil]: frisch für alle Parteien.", objekt: "Mehrfamilienhaus, [5] Etagen", flaeche: "[400] m² Wandfläche", dauer: "[2] Wochen", gewerke: "Malerarbeiten, Lackierarbeiten", service: "malerarbeiten" },
-  { slug: "holzfenster-stadtteil", cat: "Fenster", area: "elb", title: "Holzfenster [Stadtteil]", meta: "[Anzahl] Fenster · aufgearbeitet", h1: "Holzfenster in [Stadtteil]: aufgearbeitet statt ersetzt.", objekt: "Altbau, Bj. [1912]", flaeche: "[14] Fenster", dauer: "[2] Wochen", gewerke: "Schleifen, Kitt, Lack, Dichtungen", service: "fenster-tueren" },
-  { slug: "duschbad-stadtteil", cat: "Bad", area: "a", title: "Duschbad [Stadtteil]", meta: "[m²] · [Dauer] · barrierefrei", h1: "Duschbad in [Stadtteil]: bodengleich und barrierefrei.", objekt: "Wohnung, Bj. [1958]", flaeche: "[6] m²", dauer: "[3] Wochen", gewerke: "Sanitär, Fliesen, Elektro", service: "badsanierung" },
-  { slug: "einfamilienhaus-stadtteil", cat: "Komplettsanierung", area: "w", title: "Einfamilienhaus [Stadtteil]", meta: "[m²] · [Dauer] · alle Gewerke", h1: "Einfamilienhaus in [Stadtteil]: einmal alles neu.", objekt: "Einfamilienhaus, Bj. [1964]", flaeche: "[150] m²", dauer: "[12] Wochen", gewerke: "Alle Gewerke", service: "komplettsanierung" },
-  { slug: "dielenboden-stadtteil", cat: "Boden", area: "e", title: "Dielenboden [Stadtteil]", meta: "[m²] · geschliffen & geölt", h1: "Dielenboden in [Stadtteil]: 100 Jahre alt, wie neu.", objekt: "Altbauwohnung, Bj. [1925]", flaeche: "[70] m²", dauer: "[5] Tage", gewerke: "Schleifen, Ölen", service: "boden" }
-];
+// Referenzen werden im Redaktionssystem gepflegt (content/referenzen/*.json)
+export const projects = collection("referenzen");
 
 export const projectGallery = ["Wohnzimmer", "Küche", "Bad", "Flur", "Schlafzimmer", "Detail Stuck", "Detail Dielen", "Detail Bad"];
 
@@ -548,93 +545,14 @@ export const benefits = [
   ["Gutes Werkzeug", "Professionelle Maschinen statt Baumarkt.", "M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"],
   ["Kurze Wege", "Baustellen in Hamburg statt Montage quer durchs Land.", icons.pin]
 ];
-export const jobs = [
-  { title: "Maler und Lackierer (m/w/d)", type: "Vollzeit", tasks: ["Spachtel-, Streich- und Lackierarbeiten in Wohnungen und Treppenhäusern", "Tapezieren und Aufarbeiten von Holzfenstern", "Sorgfältiger Umgang mit Kundeneigentum"], profile: ["Abgeschlossene Ausbildung als Maler/-in und Lackierer/-in", "Erfahrung im Innenausbau [prüfen]", "Führerschein Klasse B"] },
-  { title: "Anlagenmechaniker SHK (m/w/d)", type: "Vollzeit", tasks: ["Installation von Sanitär- und Heizungsanlagen", "Badsanierungen im Team", "Wartung und Austausch von Heizkörpern"], profile: ["Abgeschlossene Ausbildung als Anlagenmechaniker/-in SHK", "Selbstständige, saubere Arbeitsweise", "Führerschein Klasse B"] },
-  { title: "Elektroniker (m/w/d)", type: "Vollzeit", tasks: ["Elektroinstallationen in Sanierungsprojekten", "Aufbau von Unterverteilungen", "Prüfung und Dokumentation"], profile: ["Abgeschlossene Ausbildung als Elektroniker/-in für Energie- und Gebäudetechnik", "Erfahrung im Altbau von Vorteil", "Führerschein Klasse B"] },
-  { title: "Immobilienkaufmann/-frau (m/w/d)", type: "Vollzeit", tasks: ["Vermarktung und Vermietung von Wohn- und Gewerbeimmobilien", "Exposés, Besichtigungen und Interessentenbetreuung", "Bewertungen und Eigentümerberatung [Aufgaben prüfen]"], profile: ["Abgeschlossene Ausbildung als Immobilienkaufmann/-frau oder vergleichbar", "Erfahrung in Vermarktung oder Verwaltung [prüfen]", "Führerschein Klasse B"] },
-  { title: "Ausbildung 2027 (m/w/d)", type: "Ausbildung", tasks: ["Mitarbeit auf echten Baustellen von Anfang an", "Feste Ansprechperson während der gesamten Ausbildung", "Berufsschule in Hamburg"], profile: ["Schulabschluss [prüfen]", "Freude am Handwerk", "Zuverlässigkeit und Teamgeist"] }
-];
+// Stellen werden im Redaktionssystem gepflegt (content/jobs/*.json)
+export const jobs = collection("jobs");
 
 // ---------------------------------------------------------------------------
 // Ratgeber
 // ---------------------------------------------------------------------------
-export const articles = [
-  {
-    slug: "was-kostet-eine-badsanierung", cat: "Kosten", tags: "Kosten · Bad", time: "6 Min.", title: "Was kostet eine Badsanierung in Hamburg?",
-    teaser: "Wovon der Preis abhängt, welche Posten oft vergessen werden und wie Sie Angebote vergleichen.",
-    short: "Eine Badsanierung in Hamburg kostet je nach Größe und Ausstattung meist zwischen [X] und [X] Euro. Die größten Preistreiber sind Fliesen, Sanitärobjekte und der Zustand der Leitungen – besonders im Altbau.",
-    service: "badsanierung", ctaTitle: "Ihr Bad, Ihr Preis.",
-    sections: [
-      ["Was die Kosten bestimmt", ["Der Preis einer Badsanierung hängt vor allem von vier Dingen ab: der Größe des Bades, der gewünschten Ausstattung, dem Zustand der vorhandenen Leitungen und davon, ob Anschlüsse an ihrem Platz bleiben können.", "Ein kleines Duschbad mit Standardfliesen ist deutlich günstiger als ein großes Familienbad mit bodengleicher Dusche, freistehender Wanne und großformatigen Fliesen. Im Hamburger Altbau kommen oft alte Leitungen oder ein unebener Untergrund dazu – das sollte im Angebot von Anfang an berücksichtigt sein."], "Eigenes Foto: Bad im Rohbau"],
-      ["Beispielrechnung", null, null, "table"],
-      ["Versteckte Kosten", ["Manche Posten tauchen erst auf, wenn die alten Fliesen herunter sind: marode Leitungen, ein schadhafter Estrich oder eine fehlende Abdichtung. Auch die Entsorgung des Bauschutts und eine Übergangslösung während der Bauzeit sollten Sie einplanen.", "Fragen Sie deshalb bei jedem Angebot nach, ob Entsorgung, Abdichtung und Elektroarbeiten enthalten sind – und wie mit Unvorhergesehenem umgegangen wird."]],
-      ["So sparen Sie, ohne zu pfuschen", ["Lassen Sie Anschlüsse möglichst dort, wo sie sind – das spart Installationsaufwand. Standardformate bei Fliesen sind günstiger zu verlegen als Großformate oder Mosaik.", "Eigenleistung ist möglich, sollte aber vorher abgesprochen werden, zum Beispiel beim Ausräumen oder beim Rückbau von Möbeln. Bei Abdichtung, Elektro und Sanitär gilt: lieber vom Fachbetrieb."]]
-    ],
-    faq: [["Gibt es Zuschüsse für eine Badsanierung?", "Für barrierefreie Umbauten gibt es unter Umständen Zuschüsse. [Programme prüfen und verlinken]"], ["Wie lange dauert eine Badsanierung?", "Meist [X–X] Wochen, je nach Größe und Umfang."], ["Ist ein Festpreis möglich?", "[Antwort einsetzen – nur zusagen, was ihr wirklich anbietet]"]]
-  },
-  {
-    slug: "altbau-kaufen-worauf-achten", cat: "Altbau", tags: "Altbau · Kauf", time: "8 Min.", title: "Altbau kaufen – worauf achten?",
-    teaser: "Leitungen, Feuchtigkeit, Fenster: die wichtigsten Punkte für die Besichtigung.",
-    short: "Beim Altbaukauf lohnt sich ein genauer Blick auf Elektrik, Wasserleitungen, Feuchtigkeit, Fenster und Heizung. Diese Punkte entscheiden darüber, wie viel nach dem Kauf noch investiert werden muss.",
-    service: "altbausanierung", ctaTitle: "Altbau gekauft?",
-    sections: [
-      ["Elektrik und Leitungen", ["Alte Schraubsicherungen, fehlende FI-Schutzschalter oder zweiadrige Leitungen sind Hinweise darauf, dass die Elektrik erneuert werden muss. Bei Wasserleitungen sollten Sie nach dem Material fragen – alte Bleileitungen müssen ersetzt werden.", "Ein Blick in den Sicherungskasten und in den Keller verrät oft schon viel."], "Eigenes Foto: alter Sicherungskasten"],
-      ["Feuchtigkeit und Substanz", ["Achten Sie auf Stockflecken, abplatzenden Putz und muffigen Geruch – vor allem im Keller und im Erdgeschoss. Bei Holzbalkendecken lohnt es sich, auf Durchbiegungen und knarrende Stellen zu achten."]],
-      ["Fenster, Dach und Heizung", ["Alte Holzfenster lassen sich oft aufarbeiten. Prüfen Sie aber, ob das Holz morsch ist. Beim Dach und bei der Heizung hilft ein Blick in die Unterlagen: Wann wurde zuletzt erneuert?", "Bei größeren Fragen empfiehlt sich ein Termin mit einem Sachverständigen oder Handwerksbetrieb vor dem Kauf."]]
-    ],
-    faq: [["Lohnt sich ein Gutachten vor dem Kauf?", "Bei älteren Gebäuden meist ja. [Empfehlung prüfen]"], ["Kommen Sie auch vor dem Kauf zur Besichtigung?", "[Angebot prüfen und einsetzen]"]]
-  },
-  {
-    slug: "foerderung-energetische-sanierung", cat: "Förderung", tags: "Förderung · Energie", time: "7 Min.", title: "Förderung für energetische Sanierung",
-    teaser: "KfW und BAFA im Überblick – und warum Sie den Antrag vor dem Auftrag stellen sollten.",
-    short: "Für energetische Sanierungen gibt es Zuschüsse und günstige Kredite, zum Beispiel über KfW und BAFA. Wichtig: Bei vielen Programmen muss der Antrag vor der Auftragsvergabe gestellt werden. [Inhalte aktuell halten]",
-    service: "energetische-sanierung", ctaTitle: "Förderung mitdenken.",
-    sections: [
-      ["Welche Programme es gibt", ["Grundsätzlich unterscheidet man zwischen Zuschüssen für Einzelmaßnahmen – etwa Dämmung, Fenster oder Heizungsoptimierung – und Förderungen für umfassende Sanierungen. Die genauen Konditionen ändern sich regelmäßig. [Aktuelle Programme prüfen und verlinken]"], "Eigenes Foto: Dämmarbeiten am Dach"],
-      ["Die richtige Reihenfolge", ["Bei vielen Programmen gilt: erst Antrag, dann Auftrag. Häufig ist außerdem eine Energieberatung oder die Bestätigung durch eine Energie-Effizienz-Expertin bzw. einen -Experten nötig.", "Planen Sie die Förderung deshalb von Anfang an ein – wir stimmen uns dafür mit Energieberatern ab [prüfen]."]],
-      ["Was Sie vorbereiten können", ["Sammeln Sie Unterlagen zu Baujahr, Wohnfläche, Heizung und bisherigen Sanierungen. Fotos und Grundrisse helfen bei der ersten Einschätzung."]]
-    ],
-    faq: [["Wer stellt den Förderantrag?", "In der Regel Sie als Eigentümer – oft mit Unterstützung der Energieberatung. [prüfen]"], ["Kann ich Förderungen kombinieren?", "Teilweise ja. [Aktuelle Regeln prüfen]"]]
-  },
-  {
-    slug: "bodengleiche-dusche-im-altbau", cat: "Bad", tags: "Bad · Altbau", time: "5 Min.", title: "Bodengleiche Dusche im Altbau",
-    teaser: "Was technisch möglich ist und welche Lösungen es bei geringer Aufbauhöhe gibt.",
-    short: "Eine bodengleiche Dusche ist auch im Altbau oft möglich. Entscheidend sind die Aufbauhöhe des Bodens, die Lage des Abflusses und die Deckenkonstruktion.",
-    service: "badsanierung", ctaTitle: "Neue Dusche geplant?",
-    sections: [
-      ["Die Herausforderung im Altbau", ["Für eine bodengleiche Dusche braucht der Abfluss Gefälle. Im Altbau ist die Aufbauhöhe aber oft gering – besonders bei Holzbalkendecken. Deshalb muss genau geplant werden."], "Eigenes Foto: bodengleiche Dusche"],
-      ["Mögliche Lösungen", ["Flache Duschrinnen und Bodenabläufe mit geringer Einbauhöhe schaffen oft schon genug Spielraum. Wenn das nicht reicht, kann eine minimale Stufe oder ein leicht erhöhtes Bad eine Lösung sein. In manchen Fällen kommt eine Pumpe infrage [prüfen]."]],
-      ["Abdichtung ist alles", ["Gerade bei bodengleichen Duschen ist eine normgerechte Abdichtung entscheidend. Sie sollte immer vom Fachbetrieb ausgeführt werden."]]
-    ],
-    faq: [["Geht das auch bei Holzbalkendecken?", "Oft ja – mit flachen Systemen. Wir prüfen das bei der Besichtigung."], ["Wie lange dauert der Umbau?", "Als Teil einer Badsanierung meist [X] Wochen."]]
-  },
-  {
-    slug: "komplettsanierung-reihenfolge", cat: "Planung", tags: "Planung", time: "6 Min.", title: "Komplettsanierung: die richtige Reihenfolge",
-    teaser: "Welches Gewerk wann dran ist – und wo sich Zeit sparen lässt.",
-    short: "Bei einer Komplettsanierung gilt grob: von grob nach fein, von oben nach unten und von innen nach außen in der Wand. Erst Rückbau, dann Installation, dann Oberflächen.",
-    service: "komplettsanierung", ctaTitle: "Alles aus einer Hand.",
-    sections: [
-      ["1. Rückbau und Bestandsaufnahme", ["Zuerst wird alles entfernt, was erneuert wird. Danach zeigt sich, in welchem Zustand Wände, Böden und Leitungen wirklich sind."], "Eigenes Foto: Wohnung im Rückbau"],
-      ["2. Rohinstallation", ["Elektro, Sanitär und Heizung kommen vor dem Trockenbau und dem Putz. Jetzt werden Leitungen verlegt und Vorwände gestellt."]],
-      ["3. Wände, Estrich, Fliesen", ["Danach folgen Trockenbau, Putz und gegebenenfalls Estrich – mit ausreichend Trocknungszeit. Anschließend werden Bad und Küche gefliest."]],
-      ["4. Oberflächen und Montage", ["Malerarbeiten kommen vor dem Bodenbelag, damit der neue Boden geschützt bleibt. Zum Schluss werden Schalter, Steckdosen, Türen und Sanitärobjekte montiert."]]
-    ],
-    faq: [["Wie viel Zeit spart eine gute Koordination?", "Oft mehrere Wochen, weil Gewerke nahtlos ineinandergreifen."], ["Wer koordiniert die Gewerke?", "Bei uns Ihr fester Ansprechpartner."]]
-  },
-  {
-    slug: "holzfenster-aufarbeiten-oder-tauschen", cat: "Altbau", tags: "Altbau · Fenster", time: "4 Min.", title: "Holzfenster aufarbeiten oder tauschen?",
-    teaser: "Wann sich Schleifen und Lackieren lohnt und wann neue Fenster sinnvoller sind.",
-    short: "Gut erhaltene Holzfenster lassen sich oft für einen Bruchteil der Kosten neuer Fenster aufarbeiten. Ist das Holz morsch oder soll die Dämmung deutlich besser werden, sind neue Fenster meist sinnvoller.",
-    service: "fenster-tueren", ctaTitle: "Fenster prüfen lassen.",
-    sections: [
-      ["Wann sich Aufarbeiten lohnt", ["Wenn das Holz im Kern gesund ist, lohnt sich das Aufarbeiten: Alter Lack wird abgeschliffen, Kitt erneuert, das Fenster neu lackiert und mit Dichtungen versehen. So bleibt der Charakter des Hauses erhalten."], "Eigenes Foto: Holzfenster beim Schleifen"],
-      ["Wann neue Fenster besser sind", ["Bei morschem Holz, verzogenen Rahmen oder wenn Sie Heizkosten deutlich senken möchten, sind neue Fenster oft die bessere Wahl. Bei denkmalgeschützten Häusern gibt es dafür spezielle Lösungen [prüfen]."]],
-      ["Unser Tipp", ["Lassen Sie den Zustand vor Ort prüfen. Oft lassen sich einzelne Fenster aufarbeiten und nur die schlechtesten ersetzen."]]
-    ],
-    faq: [["Wie lange hält eine Aufarbeitung?", "Bei guter Pflege viele Jahre. [Erfahrungswert einsetzen]"], ["Kann man alte Fenster besser dämmen?", "Mit neuen Dichtungen und ggf. neuer Verglasung lässt sich einiges verbessern. [prüfen]"]]
-  }
-];
+// Ratgeber-Artikel werden im Redaktionssystem gepflegt (content/ratgeber/*.json)
+export const articles = collection("ratgeber");
 
 // ---------------------------------------------------------------------------
 // Navigation – Mega-Menü (Header), Footer-Spalten und Startseiten-Einstiege
@@ -644,7 +562,7 @@ export const menu = {
   bauen: {
     label: "Bauen & Sanieren",
     col1Title: "Neubau & Sanierung",
-    col1: [["Neubau & Projektierung", "/neubau"], ["Komplettsanierung", "/leistungen/komplettsanierung"], ["Altbausanierung", "/leistungen/altbausanierung"], ["Badsanierung", "/leistungen/badsanierung"], ["Energetische Sanierung", "/leistungen/energetische-sanierung"]],
+    col1: [["Neubau & Projektierung", "/neubau"], ["Aktuelle Bauvorhaben", "/bauvorhaben"], ["Komplettsanierung", "/leistungen/komplettsanierung"], ["Altbausanierung", "/leistungen/altbausanierung"], ["Badsanierung", "/leistungen/badsanierung"], ["Energetische Sanierung", "/leistungen/energetische-sanierung"]],
     col2Title: "Einzelgewerke",
     col2: [["Maler", "/leistungen/malerarbeiten"], ["Elektro", "/leistungen/elektroarbeiten"], ["Sanitär & Heizung", "/leistungen/sanitaer-heizung"], ["Boden", "/leistungen/boden"], ["Trockenbau", "/leistungen/trockenbau"], ["Fenster & Türen", "/leistungen/fenster-tueren"]],
     extra: ["So läuft es ab", "/ablauf"],
@@ -670,7 +588,7 @@ export const menu = {
 };
 
 export const footerLinks = {
-  bauen: [["Neubau & Projektierung", "/neubau"], ["Komplettsanierung", "/leistungen/komplettsanierung"], ["Altbausanierung", "/leistungen/altbausanierung"], ["Badsanierung", "/leistungen/badsanierung"], ["Energetische Sanierung", "/leistungen/energetische-sanierung"], ["Einzelgewerke (Maler, Elektro, Sanitär …)", "/leistungen"], ["So läuft es ab", "/ablauf"]],
+  bauen: [["Neubau & Projektierung", "/neubau"], ["Aktuelle Bauvorhaben", "/bauvorhaben"], ["Komplettsanierung", "/leistungen/komplettsanierung"], ["Altbausanierung", "/leistungen/altbausanierung"], ["Badsanierung", "/leistungen/badsanierung"], ["Energetische Sanierung", "/leistungen/energetische-sanierung"], ["Einzelgewerke (Maler, Elektro, Sanitär …)", "/leistungen"], ["So läuft es ab", "/ablauf"]],
   immobilien: [["Kaufen & Mieten", "/immobilien"], ["Immobilie verkaufen", "/immobilie-verkaufen"], ["Immobilie vermieten", "/immobilie-verkaufen?ziel=vermieten"], ["Kostenlose Bewertung", "/immobilie-verkaufen#bewertung"], ["Hausverwaltung", "/hausverwaltung"], ["Suchauftrag", "/kontakt?anliegen=suchen"]],
   unternehmen: [["Über uns", "/ueber-uns"], ["Referenzen", "/referenzen"], ["Ratgeber", "/ratgeber"], ["Karriere", "/karriere"], ["Einsatzgebiet", "/einsatzgebiet"], ["Kontakt", "/kontakt"]]
 };
@@ -715,26 +633,14 @@ export const neubau = {
 };
 
 // ---------------------------------------------------------------------------
-// Immobilien – Angebote (später automatisch aus onOffice)
-// kind: Kauf/Miete · region: Filterwert „Ort / Region“ · type: Objektart · price: Zahl für „Preis bis“
+// Immobilien – Angebote
 // ---------------------------------------------------------------------------
-export const listings = [
-  { kind: "Kauf", img: "objekt-cas-catala", place: "Cas Catala (Mallorca)", title: "Exklusives Penthouse mit Meerblick", facts: "[Zimmer] Zi. · [Fläche] m² · Wohnung", price: "1.650.000 €", priceNum: 1650000, region: "Ausland", type: "Wohnung" },
-  { kind: "Miete", img: "objekt-sasel", place: "Hamburg-Sasel", title: "Exklusiv wohnen im schönen Sasel", facts: "[Zimmer] Zi. · [Fläche] m² · Haus", price: "3.650 € / Monat", priceNum: 3650, region: "Alstertal", type: "Haus", slug: "exklusiv-wohnen-sasel" },
-  { kind: "Miete", img: "objekt-hoisdorf", place: "Hoisdorf", title: "Exklusiv wohnen im schönen Hoisdorf", facts: "[Zimmer] Zi. · [Fläche] m² · Haus", price: "2.650 € / Monat", priceNum: 2650, region: "Umland", type: "Haus" },
-  { kind: "Miete", img: "objekt-bargteheide", place: "Bargteheide", title: "[Objekttitel ergänzen]", facts: "[Zimmer] Zi. · [Fläche] m² · [Objektart]", price: "5.990 € / Monat", priceNum: 5990, region: "Umland", type: "" },
-  { kind: "Miete", img: "objekt-altona", place: "Hamburg-Altona", title: "Handwerker-Boxen und Lagerflächen", facts: "[Fläche] m² · Gewerbe", price: "900 € / Monat", priceNum: 900, region: "Hamburg (weitere)", type: "Gewerbe" }
-];
+// Immobilienangebote, Bauvorhaben und Kundenstimmen werden im Redaktionssystem gepflegt
+// (content/immobilien, content/bauvorhaben, content/bewertungen)
+export const immobilien = collection("immobilien");
+export const bauvorhaben = collection("bauvorhaben");
+export const bewertungen = collection("bewertungen");
 
-export const expose = {
-  slug: "exklusiv-wohnen-sasel",
-  facts: [["Kaltmiete", "3.650 €"], ["Wohnfläche", "[ ] m²"], ["Zimmer", "[ ]"], ["Verfügbar ab", "[Datum]"]],
-  description: "[Beschreibungstext aus dem Exposé: Lage im Haus, Raumaufteilung, Besonderheiten.]",
-  features: ["[Merkmal, z. B. Einbauküche]", "[Merkmal, z. B. Terrasse / Garten]", "[Merkmal, z. B. Fußbodenheizung]", "[Merkmal, z. B. Stellplatz]"],
-  location: "[Lagebeschreibung: Nahversorgung, Schulen, Anbindung – ohne genaue Adresse.]",
-  energy: [["Ausweistyp", "[Bedarf / Verbrauch]"], ["Energiekennwert", "[ ] kWh/(m²·a)"], ["Energieträger", "[ ]"], ["Baujahr", "[ ]"], ["Effizienzklasse", "[ ]"]],
-  thumbs: [["Wohnen", "wohnen"], ["Küche", "kueche"], ["Bad", "bad-dusche"], ["Schlafen", "schlafen"]]
-};
 
 // ---------------------------------------------------------------------------
 // Immobilie verkaufen / vermieten / bewerten

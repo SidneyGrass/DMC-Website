@@ -1,0 +1,57 @@
+{
+  "title": "Was kostet eine Badsanierung in Hamburg?",
+  "slug": "was-kostet-eine-badsanierung",
+  "published": true,
+  "order": 1,
+  "date": "2026-11-02",
+  "cat": "Kosten",
+  "tags": "Kosten · Bad",
+  "time": "6 Min.",
+  "teaser": "Wovon der Preis abhängt, welche Posten oft vergessen werden und wie Sie Angebote vergleichen.",
+  "short": "Eine Badsanierung in Hamburg kostet je nach Größe und Ausstattung meist zwischen [X] und [X] Euro. Die größten Preistreiber sind Fliesen, Sanitärobjekte und der Zustand der Leitungen – besonders im Altbau.",
+  "service": "badsanierung",
+  "ctaTitle": "Ihr Bad, Ihr Preis.",
+  "author": "",
+  "authorRole": "",
+  "cover": "",
+  "sections": [
+    {
+      "heading": "Was die Kosten bestimmt",
+      "text": "Der Preis einer Badsanierung hängt vor allem von vier Dingen ab: der Größe des Bades, der gewünschten Ausstattung, dem Zustand der vorhandenen Leitungen und davon, ob Anschlüsse an ihrem Platz bleiben können.\n\nEin kleines Duschbad mit Standardfliesen ist deutlich günstiger als ein großes Familienbad mit bodengleicher Dusche, freistehender Wanne und großformatigen Fliesen. Im Hamburger Altbau kommen oft alte Leitungen oder ein unebener Untergrund dazu – das sollte im Angebot von Anfang an berücksichtigt sein.",
+      "image": "",
+      "imageCaption": "Eigenes Foto: Bad im Rohbau"
+    },
+    {
+      "heading": "Beispielrechnung",
+      "text": "| Posten | Kleines Bad (ca. [X] m²) | Großes Bad (ca. [X] m²) |\n| --- | --- | --- |\n| Demontage & Entsorgung | [€] | [€] |\n| Sanitär & Elektro | [€] | [€] |\n| Fliesen & Abdichtung | [€] | [€] |\n| Gesamt (Richtwert) | [€] | [€] |\n\n*Richtwerte für Hamburg, Stand [MM/JJJJ]. Der genaue Preis hängt von Ihrem Bad ab.*",
+      "image": "",
+      "imageCaption": ""
+    },
+    {
+      "heading": "Versteckte Kosten",
+      "text": "Manche Posten tauchen erst auf, wenn die alten Fliesen herunter sind: marode Leitungen, ein schadhafter Estrich oder eine fehlende Abdichtung. Auch die Entsorgung des Bauschutts und eine Übergangslösung während der Bauzeit sollten Sie einplanen.\n\nFragen Sie deshalb bei jedem Angebot nach, ob Entsorgung, Abdichtung und Elektroarbeiten enthalten sind – und wie mit Unvorhergesehenem umgegangen wird.",
+      "image": "",
+      "imageCaption": ""
+    },
+    {
+      "heading": "So sparen Sie, ohne zu pfuschen",
+      "text": "Lassen Sie Anschlüsse möglichst dort, wo sie sind – das spart Installationsaufwand. Standardformate bei Fliesen sind günstiger zu verlegen als Großformate oder Mosaik.\n\nEigenleistung ist möglich, sollte aber vorher abgesprochen werden, zum Beispiel beim Ausräumen oder beim Rückbau von Möbeln. Bei Abdichtung, Elektro und Sanitär gilt: lieber vom Fachbetrieb.",
+      "image": "",
+      "imageCaption": ""
+    }
+  ],
+  "faq": [
+    {
+      "q": "Gibt es Zuschüsse für eine Badsanierung?",
+      "a": "Für barrierefreie Umbauten gibt es unter Umständen Zuschüsse. [Programme prüfen und verlinken]"
+    },
+    {
+      "q": "Wie lange dauert eine Badsanierung?",
+      "a": "Meist [X–X] Wochen, je nach Größe und Umfang."
+    },
+    {
+      "q": "Ist ein Festpreis möglich?",
+      "a": "[Antwort einsetzen – nur zusagen, was ihr wirklich anbietet]"
+    }
+  ]
+}

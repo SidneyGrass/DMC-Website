@@ -1,0 +1,33 @@
+{
+  "title": "Fichtenkamp 23",
+  "slug": "fichtenkamp-23",
+  "published": true,
+  "order": 1,
+  "ort": "22393 Hamburg",
+  "typ": "6 Doppelhaushälften",
+  "status": "Im Bau",
+  "fertigstellung": "Q1 2027",
+  "fortschritt": 50,
+  "teaser": "Sechs moderne Doppelhaushälften in ruhiger Lage im Hamburger Norden. [Kurzbeschreibung prüfen]",
+  "beschreibung": "[Beschreibung des Bauvorhabens einsetzen: Lage, Architektur, Bauweise, Energiestandard, Ausstattung.]",
+  "eckdaten": [
+    {
+      "label": "Wohnfläche",
+      "value": "[ca. XXX m²]"
+    },
+    {
+      "label": "Energiestandard",
+      "value": "[z. B. KfW 40]"
+    }
+  ],
+  "titelbild": "",
+  "galerie": [],
+  "updates": [
+    {
+      "datum": "2026-11-02",
+      "titel": "Bauvorhaben online",
+      "text": "Ab sofort berichten wir hier regelmäßig über den Baufortschritt.",
+      "bild": ""
+    }
+  ]
+}

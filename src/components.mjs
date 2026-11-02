@@ -7,7 +7,8 @@ export const icon = (d, { size = 24, stroke = "currentColor", width = 1.6, cls =
   `<svg aria-hidden="true"${cls ? ` class="${cls}"` : ""} width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
 
 const IMG = "/img/dmc/";
-export const imgSrc = (key) => IMG + key + ".jpg";
+// key = DMC-Bild (z. B. "villa") oder Pfad eines hochgeladenen Fotos (/uploads/… bzw. /img/…)
+export const imgSrc = (key = "") => (String(key).startsWith("/") ? key : IMG + key + ".jpg");
 
 export const check = (txt) => `<li>${icon(icons.check, { size: 18, stroke: "#8A6A33", width: 2.2 })}<span>${txt}</span></li>`;
 
@@ -185,8 +186,9 @@ export function imageFor(label = "", art = "objekt") {
   return { key, src: IMG + key + ".jpg", pos: POS[key] || "50% 50%" };
 }
 
+// img = DMC-Bild oder hochgeladenes Foto (/uploads/…) – hat Vorrang vor der automatischen Zuordnung
 export function ph(label, { h = "", tone = "", attrs = "", art = "objekt", img = "" } = {}) {
-  const pic = img ? { src: IMG + img + ".jpg", pos: POS[img] || "50% 50%" } : imageFor(label, art);
+  const pic = img ? { src: imgSrc(img), pos: POS[img] || "50% 50%" } : imageFor(label, art);
   const style = h ? ` style="--h:${h}"` : "";
   if (pic) return `<div class="ph ph--photo"${style}${attrs}><img src="${pic.src}" alt="${esc(label)}" loading="lazy" decoding="async" style="object-position:${pic.pos}"></div>`;
   const cls = tone ? ` ph--${tone}` : "";
@@ -195,8 +197,8 @@ export function ph(label, { h = "", tone = "", attrs = "", art = "objekt", img =
 
 export function beforeAfter({ caption = "", small = false, h = "", after = "wohnen", before = "altbau-vorher" } = {}) {
   return `<div class="ba${small ? " ba--sm" : ""}"${h ? ` style="--h:${h}"` : ""}>
-  <div class="ba__img ba__img--before"><img src="${IMG}${before}.jpg" alt="Vorher" loading="lazy" decoding="async"><span class="ba__tag">Vorher</span></div>
-  <div class="ba__img ba__img--after"><img src="${IMG}${after}.jpg" alt="Nachher" loading="lazy" decoding="async"><span class="ba__tag">Nachher</span></div>
+  <div class="ba__img ba__img--before"><img src="${imgSrc(before)}" alt="Vorher" loading="lazy" decoding="async"><span class="ba__tag">Vorher</span></div>
+  <div class="ba__img ba__img--after"><img src="${imgSrc(after)}" alt="Nachher" loading="lazy" decoding="async"><span class="ba__tag">Nachher</span></div>
   <span class="ba__line" aria-hidden="true"></span><span class="ba__handle" aria-hidden="true">‹ ›</span>
   ${caption ? `<span class="ba__caption">${caption}</span>` : ""}
   <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Vorher-Nachher-Vergleich verschieben">
@@ -224,17 +226,21 @@ export function tile(s, { compact = false } = {}) {
 </a>`;
 }
 
-const afterFor = (p) => ({ Bad: p.slug.startsWith("dusch") ? "bad-dusche" : "bad-holz", Energetisch: "haus-weiss", Fenster: "villa", Maler: "treppe", Boden: "wohnen", Altbau: "schlafen" }[p.cat] || (p.slug.startsWith("einfamilien") ? "villa" : "wohnen"));
+const afterFor = (p) => p.nachher || ({ Bad: p.slug.startsWith("dusch") ? "bad-dusche" : "bad-holz", Energetisch: "haus-weiss", Fenster: "villa", Maler: "treppe", Boden: "wohnen", Altbau: "schlafen" }[p.cat] || (p.slug.startsWith("einfamilien") ? "villa" : "wohnen"));
 export { afterFor };
 
 export function refCard(p, { bordered = false } = {}) {
   return `<a class="ref-card${bordered ? " ref-card--bordered" : ""}" href="/referenzen/${p.slug}">
-  ${p.img ? ph(p.title, { img: p.img, h: "240px" }) : beforeAfter({ small: true, after: afterFor(p) })}
-  <span class="ref-card__body"><span class="ref-card__tag">${p.cat}</span><span class="ref-card__title">${p.title}</span><span class="ref-card__meta">${p.meta}</span></span>
+  ${p.foto ? ph(p.title, { img: p.foto, h: "240px" }) : beforeAfter({ small: true, after: afterFor(p), ...(p.vorher ? { before: p.vorher } : {}) })}
+  <span class="ref-card__body"><span class="ref-card__tag">${esc(p.cat)}</span><span class="ref-card__title">${esc(p.title)}</span><span class="ref-card__meta">${esc(p.meta)}</span></span>
 </a>`;
 }
 
 export function quoteCard(meta) {
+  if (meta && typeof meta === "object") {
+    const n = Math.max(1, Math.min(5, Number(meta.sterne) || 5));
+    return `<figure class="quote-card"><span class="stars" aria-label="${n} von 5 Sternen">${"★".repeat(n)}${"☆".repeat(5 - n)}</span><blockquote>„${esc(meta.text)}“</blockquote><figcaption><strong>${esc(meta.title)}</strong>${meta.meta ? ` · ${esc(meta.meta)}` : ""}</figcaption></figure>`;
+  }
   return `<figure class="quote-card"><span class="stars" aria-label="5 von 5 Sternen">★★★★★</span><blockquote>„[Echtes Kundenzitat mit Einwilligung einsetzen]“</blockquote><figcaption><strong>[Vorname N.]</strong> · ${meta}</figcaption></figure>`;
 }
 

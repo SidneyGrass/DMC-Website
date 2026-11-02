@@ -1,0 +1,47 @@
+{
+  "title": "Altbau kaufen – worauf achten?",
+  "slug": "altbau-kaufen-worauf-achten",
+  "published": true,
+  "order": 2,
+  "date": "2026-11-02",
+  "cat": "Altbau",
+  "tags": "Altbau · Kauf",
+  "time": "8 Min.",
+  "teaser": "Leitungen, Feuchtigkeit, Fenster: die wichtigsten Punkte für die Besichtigung.",
+  "short": "Beim Altbaukauf lohnt sich ein genauer Blick auf Elektrik, Wasserleitungen, Feuchtigkeit, Fenster und Heizung. Diese Punkte entscheiden darüber, wie viel nach dem Kauf noch investiert werden muss.",
+  "service": "altbausanierung",
+  "ctaTitle": "Altbau gekauft?",
+  "author": "",
+  "authorRole": "",
+  "cover": "",
+  "sections": [
+    {
+      "heading": "Elektrik und Leitungen",
+      "text": "Alte Schraubsicherungen, fehlende FI-Schutzschalter oder zweiadrige Leitungen sind Hinweise darauf, dass die Elektrik erneuert werden muss. Bei Wasserleitungen sollten Sie nach dem Material fragen – alte Bleileitungen müssen ersetzt werden.\n\nEin Blick in den Sicherungskasten und in den Keller verrät oft schon viel.",
+      "image": "",
+      "imageCaption": "Eigenes Foto: alter Sicherungskasten"
+    },
+    {
+      "heading": "Feuchtigkeit und Substanz",
+      "text": "Achten Sie auf Stockflecken, abplatzenden Putz und muffigen Geruch – vor allem im Keller und im Erdgeschoss. Bei Holzbalkendecken lohnt es sich, auf Durchbiegungen und knarrende Stellen zu achten.",
+      "image": "",
+      "imageCaption": ""
+    },
+    {
+      "heading": "Fenster, Dach und Heizung",
+      "text": "Alte Holzfenster lassen sich oft aufarbeiten. Prüfen Sie aber, ob das Holz morsch ist. Beim Dach und bei der Heizung hilft ein Blick in die Unterlagen: Wann wurde zuletzt erneuert?\n\nBei größeren Fragen empfiehlt sich ein Termin mit einem Sachverständigen oder Handwerksbetrieb vor dem Kauf.",
+      "image": "",
+      "imageCaption": ""
+    }
+  ],
+  "faq": [
+    {
+      "q": "Lohnt sich ein Gutachten vor dem Kauf?",
+      "a": "Bei älteren Gebäuden meist ja. [Empfehlung prüfen]"
+    },
+    {
+      "q": "Kommen Sie auch vor dem Kauf zur Besichtigung?",
+      "a": "[Angebot prüfen und einsetzen]"
+    }
+  ]
+}

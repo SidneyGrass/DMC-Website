@@ -1,0 +1,53 @@
+{
+  "title": "Komplettsanierung: die richtige Reihenfolge",
+  "slug": "komplettsanierung-reihenfolge",
+  "published": true,
+  "order": 5,
+  "date": "2026-11-02",
+  "cat": "Planung",
+  "tags": "Planung",
+  "time": "6 Min.",
+  "teaser": "Welches Gewerk wann dran ist – und wo sich Zeit sparen lässt.",
+  "short": "Bei einer Komplettsanierung gilt grob: von grob nach fein, von oben nach unten und von innen nach außen in der Wand. Erst Rückbau, dann Installation, dann Oberflächen.",
+  "service": "komplettsanierung",
+  "ctaTitle": "Alles aus einer Hand.",
+  "author": "",
+  "authorRole": "",
+  "cover": "",
+  "sections": [
+    {
+      "heading": "1. Rückbau und Bestandsaufnahme",
+      "text": "Zuerst wird alles entfernt, was erneuert wird. Danach zeigt sich, in welchem Zustand Wände, Böden und Leitungen wirklich sind.",
+      "image": "",
+      "imageCaption": "Eigenes Foto: Wohnung im Rückbau"
+    },
+    {
+      "heading": "2. Rohinstallation",
+      "text": "Elektro, Sanitär und Heizung kommen vor dem Trockenbau und dem Putz. Jetzt werden Leitungen verlegt und Vorwände gestellt.",
+      "image": "",
+      "imageCaption": ""
+    },
+    {
+      "heading": "3. Wände, Estrich, Fliesen",
+      "text": "Danach folgen Trockenbau, Putz und gegebenenfalls Estrich – mit ausreichend Trocknungszeit. Anschließend werden Bad und Küche gefliest.",
+      "image": "",
+      "imageCaption": ""
+    },
+    {
+      "heading": "4. Oberflächen und Montage",
+      "text": "Malerarbeiten kommen vor dem Bodenbelag, damit der neue Boden geschützt bleibt. Zum Schluss werden Schalter, Steckdosen, Türen und Sanitärobjekte montiert.",
+      "image": "",
+      "imageCaption": ""
+    }
+  ],
+  "faq": [
+    {
+      "q": "Wie viel Zeit spart eine gute Koordination?",
+      "a": "Oft mehrere Wochen, weil Gewerke nahtlos ineinandergreifen."
+    },
+    {
+      "q": "Wer koordiniert die Gewerke?",
+      "a": "Bei uns Ihr fester Ansprechpartner."
+    }
+  ]
+}

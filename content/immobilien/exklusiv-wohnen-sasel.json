@@ -1,0 +1,52 @@
+{
+  "title": "Exklusiv wohnen im schönen Sasel",
+  "slug": "exklusiv-wohnen-sasel",
+  "published": true,
+  "order": 2,
+  "vermarktung": "Miete",
+  "objektart": "Haus",
+  "status": "Verfügbar",
+  "region": "Alstertal",
+  "ort": "Hamburg-Sasel",
+  "adresse": "",
+  "preis": "3650",
+  "preisText": "",
+  "nebenkosten": "",
+  "kaution": "",
+  "provision": "",
+  "wohnflaeche": "[ ] m²",
+  "nutzflaeche": "",
+  "grundstueck": "",
+  "zimmer": "[ ]",
+  "baujahr": "",
+  "verfuegbarAb": "[Datum]",
+  "kurzinfo": "[Zimmer] Zi. · [Fläche] m² · Haus",
+  "teaser": "",
+  "beschreibung": "[Beschreibungstext aus dem Exposé: Lage im Haus, Raumaufteilung, Besonderheiten.]",
+  "ausstattung": [
+    "[Merkmal, z. B. Einbauküche]",
+    "[Merkmal, z. B. Terrasse / Garten]",
+    "[Merkmal, z. B. Fußbodenheizung]",
+    "[Merkmal, z. B. Stellplatz]"
+  ],
+  "lage": "[Lagebeschreibung: Nahversorgung, Schulen, Anbindung – ohne genaue Adresse.]",
+  "energie": {
+    "ausweis": "[Bedarf / Verbrauch]",
+    "kennwert": "[ ]",
+    "klasse": "",
+    "traeger": "[ ]",
+    "baujahrHeizung": "[ ]"
+  },
+  "titelbild": "/img/dmc/objekt-sasel.jpg",
+  "galerie": [
+    "/img/dmc/wohnen.jpg",
+    "/img/dmc/kueche.jpg",
+    "/img/dmc/bad-dusche.jpg",
+    "/img/dmc/schlafen.jpg"
+  ],
+  "expose": "",
+  "bauvorhaben": "",
+  "kontaktName": "",
+  "kontaktTelefon": "",
+  "kontaktEmail": ""
+}
